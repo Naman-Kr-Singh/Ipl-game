@@ -1,12 +1,16 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    unique: true
+  },
+  password: String,
+  favoriteTeam: String,
   points: {
     type: Number,
     default: 0
   },
-  favoriteTeam: String,
   streak: {
     type: Number,
     default: 0
@@ -16,6 +20,6 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   }
-});
+}, { timestamps: true });
 
 export default mongoose.model('User', userSchema);
