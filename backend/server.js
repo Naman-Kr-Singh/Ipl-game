@@ -4,7 +4,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import dns from 'dns';
-
+import Match from './models/Match.js';
 import User from './models/User.js';
 
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
