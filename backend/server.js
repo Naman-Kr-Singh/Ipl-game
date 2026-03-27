@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import dns from 'dns';
 import Match from './models/Match.js';
 import User from './models/User.js';
+import Poll from './models/Poll.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -206,7 +207,7 @@ app.post('/update-points', authMiddleware, async (req, res) => {
       });
     }
 
-    if (points > 5 || points < -5) {
+    if (points > 15 || points < -15) {
       return res.status(400).json({
         success: false,
         message: "Invalid points range"
@@ -250,12 +251,9 @@ app.post('/update-points', authMiddleware, async (req, res) => {
   }
 });
 // ================= ADMIN: SET MATCH =================
-
 app.post('/set-match', authMiddleware, async (req, res) => {
   try {
-    console.log("REQ.USER:", req.user);
     const { teamA, teamB, date } = req.body;
-
     const userId = req.user.userId;
 
     // ✅ Validation
@@ -266,8 +264,15 @@ app.post('/set-match', authMiddleware, async (req, res) => {
       });
     }
 
+    if (teamA === teamB) {
+      return res.status(400).json({
+        success: false,
+        message: "Teams must be different"
+      });
+    }
+
+    // 🔒 Admin check
     const admin = await User.findById(userId);
-    console.log("DB USER:", admin); // ✅ add this too
 
     if (!admin || !admin.isAdmin) {
       return res.status(403).json({
@@ -276,15 +281,196 @@ app.post('/set-match', authMiddleware, async (req, res) => {
       });
     }
 
-    await Match.deleteMany({}); // only 1 active match
+    // 🧹 Only one active match
+    await Match.deleteMany({});
 
-    const match = new Match({ teamA, teamB, date });
+    const match = new Match({
+      teamA: teamA.trim(),
+      teamB: teamB.trim(),
+      date
+    });
+
     await match.save();
+
+    console.log(`Match set by ${admin.name}`);
 
     res.json({
       success: true,
-      message: "Match set",
+      message: "Match set successfully",
       data: match
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+});
+
+
+// ================= ADMIN: CREATE POLL =================
+app.post('/create-poll', authMiddleware, async (req, res) => {
+  try {
+    const { question, options, durationHours } = req.body;
+    const userId = req.user.userId;
+
+    const admin = await User.findById(userId);
+
+    if (!admin || !admin.isAdmin) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized"
+      });
+    }
+
+    // ✅ Validation
+    if (!question || !options || !durationHours) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing fields"
+      });
+    }
+
+    if (!Array.isArray(options)) {
+      return res.status(400).json({
+        success: false,
+        message: "Options must be array"
+      });
+    }
+
+    if (options.length < 2 || options.length > 5) {
+      return res.status(400).json({
+        success: false,
+        message: "2–5 options required"
+      });
+    }
+
+    const cleanOptions = options.filter(opt => opt.trim() !== "");
+
+    if (cleanOptions.length < 2) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid options"
+      });
+    }
+
+    const expiresAt = new Date(Date.now() + durationHours * 60 * 60 * 1000);
+
+    // 🧹 Only one active poll
+    await Poll.deleteMany({});
+
+    const poll = new Poll({
+      question,
+      options: cleanOptions.map(opt => ({ text: opt })),
+      expiresAt,
+      voters: []
+    });
+
+    await poll.save();
+
+    console.log(`Poll created by ${admin.name}`);
+
+    res.json({
+      success: true,
+      message: "Poll created",
+      data: poll
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+});
+
+
+// ================= GET CURRENT POLL =================
+app.get('/poll', async (req, res) => {
+  try {
+    const poll = await Poll.findOne();
+
+    if (!poll) {
+      return res.json({
+        success: false,
+        message: "No poll available"
+      });
+    }
+
+    // ⛔ expired
+    if (new Date() > poll.expiresAt) {
+      return res.json({
+        success: false,
+        message: "Poll expired"
+      });
+    }
+
+    res.json({
+      success: true,
+      data: poll
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+});
+
+
+// ================= VOTE =================
+app.post('/vote', authMiddleware, async (req, res) => {
+  try {
+    const { optionIndex } = req.body;
+    const userId = req.user.userId;
+
+    const poll = await Poll.findOne();
+
+    if (!poll) {
+      return res.status(404).json({
+        success: false,
+        message: "No active poll"
+      });
+    }
+
+    // ⛔ expired
+    if (new Date() > poll.expiresAt) {
+      return res.status(400).json({
+        success: false,
+        message: "Poll expired"
+      });
+    }
+
+    // ⛔ already voted
+    const alreadyVoted = poll.voters.find(v => v.userId === userId);
+
+    if (alreadyVoted) {
+      return res.status(400).json({
+        success: false,
+        message: "Already voted"
+      });
+    }
+
+    // ⛔ invalid option
+    if (optionIndex < 0 || optionIndex >= poll.options.length) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid option"
+      });
+    }
+
+    // ✅ vote
+    poll.options[optionIndex].votes += 1;
+    poll.voters.push({ userId });
+
+    await poll.save();
+
+    res.json({
+      success: true,
+      message: "Vote recorded",
+      data: poll
     });
 
   } catch (err) {
