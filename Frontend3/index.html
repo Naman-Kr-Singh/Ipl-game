@@ -80,7 +80,6 @@
     line-height: 1;
   }
 
-  /* Nav right area */
   .nav-right { display: flex; align-items: center; gap: 12px; }
 
   .nav-user-pill {
@@ -393,6 +392,31 @@
   .auth-field input:focus { border-color: rgba(247,168,0,0.5); }
   .auth-field input::placeholder { color: rgba(255,255,255,0.22); }
 
+  /* Dropdown select styling */
+  .auth-field select {
+    width: 100%; padding: 12px 16px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px; color: #fff; font-size: 15px;
+    font-family: 'Barlow', sans-serif; outline: none;
+    transition: border-color 0.2s;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(247,168,0,0.7)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-color: rgba(255,255,255,0.07);
+    padding-right: 40px;
+  }
+  .auth-field select:focus { border-color: rgba(247,168,0,0.5); }
+  .auth-field select option {
+    background: #002a7a;
+    color: #fff;
+    font-size: 15px;
+  }
+  .auth-field select option:disabled { color: rgba(255,255,255,0.3); }
+
   .auth-btn {
     width: 100%; padding: 14px; margin-top: 8px;
     background: linear-gradient(135deg, var(--ipl-gold) 0%, var(--ipl-orange) 100%);
@@ -647,7 +671,19 @@
       </div>
       <div class="auth-field">
         <label>Favourite IPL Team</label>
-        <input type="text" id="signupTeam" placeholder="e.g. Mumbai Indians" />
+        <select id="signupTeam">
+          <option value="" disabled selected>Select your favourite team</option>
+          <option value="Chennai Super Kings">💛 Chennai Super Kings (CSK)</option>
+          <option value="Delhi Capitals">🩵 Delhi Capitals (DC)</option>
+          <option value="Gujarat Titans">💙 Gujarat Titans (GT)</option>
+          <option value="Kolkata Knight Riders">💜 Kolkata Knight Riders (KKR)</option>
+          <option value="Lucknow Super Giants">🩵 Lucknow Super Giants (LSG)</option>
+          <option value="Mumbai Indians">💙 Mumbai Indians (MI)</option>
+          <option value="Punjab Kings">❤️ Punjab Kings (PBKS)</option>
+          <option value="Rajasthan Royals">💗 Rajasthan Royals (RR)</option>
+          <option value="Royal Challengers Bengaluru">❤️ Royal Challengers Bengaluru (RCB)</option>
+          <option value="Sunrisers Hyderabad">🧡 Sunrisers Hyderabad (SRH)</option>
+        </select>
       </div>
       <button class="auth-btn" onclick="doSignup()">Create Account</button>
     </div>
@@ -659,6 +695,44 @@
 <script>
   // ===== CONFIG =====
   const API = 'http://localhost:5000';
+
+  // ===== TEAM HEART MAP =====
+  const teamHearts = {
+    'Chennai Super Kings': '💛',
+    'CSK': '💛',
+    'Delhi Capitals': '🩵',
+    'DC': '🩵',
+    'Gujarat Titans': '💙',
+    'GT': '💙',
+    'Kolkata Knight Riders': '💜',
+    'KKR': '💜',
+    'Lucknow Super Giants': '🩵',
+    'LSG': '🩵',
+    'Mumbai Indians': '💙',
+    'MI': '💙',
+    'Punjab Kings': '❤️',
+    'PBKS': '❤️',
+    'Rajasthan Royals': '💗',
+    'RR': '💗',
+    'Royal Challengers Bengaluru': '❤️',
+    'RCB': '❤️',
+    'Sunrisers Hyderabad': '🧡',
+    'SRH': '🧡'
+  };
+
+  function getTeamHeart(teamName) {
+    if (!teamName) return '❤️';
+    // Try exact match first
+    if (teamHearts[teamName]) return teamHearts[teamName];
+    // Try to find by abbreviation or partial match
+    const upper = teamName.toUpperCase();
+    for (const [key, heart] of Object.entries(teamHearts)) {
+      if (upper.includes(key.toUpperCase()) || key.toUpperCase().includes(upper)) {
+        return heart;
+      }
+    }
+    return '❤️';
+  }
 
   // ===== STATE =====
   let currentUser = JSON.parse(localStorage.getItem('sattebazi_user') || 'null');
@@ -683,7 +757,6 @@
   function openPage(name) {
     closeMenu();
     document.getElementById('page-' + name)?.classList.add('active');
-    // Lazy-load data
     if (name === 'match')       loadMatch();
     if (name === 'leaderboard') loadLeaderboard();
     if (name === 'players')     loadPlayers();
@@ -770,7 +843,7 @@
   async function doSignup() {
     const name         = document.getElementById('signupName').value.trim();
     const password     = document.getElementById('signupPass').value;
-    const favoriteTeam = document.getElementById('signupTeam').value.trim();
+    const favoriteTeam = document.getElementById('signupTeam').value;
     if (!name || !password || !favoriteTeam) return setAuthMsg('Fill in all fields.', 'error');
 
     setAuthMsg('Creating account...', '');
@@ -868,19 +941,22 @@
     const el = document.getElementById('players-content');
     el.innerHTML = '<div class="spinner"></div>';
     try {
-      const res  = await fetch(`${API}/leaderboard`); // same endpoint, all users
+      const res  = await fetch(`${API}/leaderboard`);
       const data = await res.json();
       if (!data.success || !data.data.length) {
         el.innerHTML = '<p class="no-match">No players registered yet.</p>';
         return;
       }
-      const cards = data.data.map(u => `
-        <div class="player-card">
-          <div class="player-name">👤 ${escHtml(u.name)}</div>
-          <div class="player-team">❤️ ${escHtml(u.favoriteTeam || 'No team')}</div>
-          <div class="player-pts">${u.points ?? 0}</div>
-          <div class="player-pts-label">points</div>
-        </div>`).join('');
+      const cards = data.data.map(u => {
+        const heart = getTeamHeart(u.favoriteTeam);
+        return `
+          <div class="player-card">
+            <div class="player-name">👤 ${escHtml(u.name)}</div>
+            <div class="player-team">${heart} ${escHtml(u.favoriteTeam || 'No team')}</div>
+            <div class="player-pts">${u.points ?? 0}</div>
+            <div class="player-pts-label">points</div>
+          </div>`;
+      }).join('');
       el.innerHTML = `<div class="players-grid">${cards}</div>`;
     } catch {
       el.innerHTML = '<p class="no-match">Could not load players. Check if your backend is running.</p>';
