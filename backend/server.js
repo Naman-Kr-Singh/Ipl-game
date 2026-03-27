@@ -6,6 +6,8 @@ import dotenv from 'dotenv';
 import dns from 'dns';
 import Match from './models/Match.js';
 import User from './models/User.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 dotenv.config();
@@ -23,14 +25,33 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 
+// ================= AUTH MIDDLEWARE =================
+const authMiddleware = (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
 
-// ================= TEMP MATCH STORAGE =================
-let todaysMatch = {
-  teamA: "",
-  teamB: "",
-  date: ""
+    if (!authHeader) {
+      return res.status(401).json({
+        success: false,
+        message: "No token provided"
+      });
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    req.user = decoded; // { userId, isAdmin }
+
+    next();
+
+  } catch (err) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid token"
+    });
+  }
 };
-
 
 // ================= ROUTES =================
 
@@ -64,12 +85,15 @@ app.post('/signup', async (req, res) => {
       });
     }
 
-    const user = new User({
-      name,
-      password,
-      favoriteTeam,
-      isAdmin: false
-    });
+   
+const hashedPassword = await bcrypt.hash(password, 10);
+
+const user = new User({
+  name,
+  password: hashedPassword,
+  favoriteTeam,
+  isAdmin: false
+});
 
     await user.save();
 
@@ -113,22 +137,32 @@ app.post('/login', async (req, res) => {
       });
     }
 
-    if (user.password !== password) {
-      return res.status(401).json({
-        success: false,
-        message: "Wrong password"
-      });
-    }
+    const isMatch = await bcrypt.compare(password, user.password);
 
-    res.json({
-      success: true,
-      message: "Login successful",
-      data: {
-        _id: user._id,
-        name: user.name,
-        isAdmin: user.isAdmin
-      }
-    });
+if (!isMatch) {
+  return res.status(401).json({
+    success: false,
+    message: "Wrong password"
+  });
+}
+
+    // 🔐 Generate token
+const token = jwt.sign(
+  { userId: user._id, isAdmin: user.isAdmin },
+  process.env.JWT_SECRET,
+  { expiresIn: '1d' }
+);
+
+res.json({
+  success: true,
+  message: "Login successful",
+  token,
+  data: {
+    _id: user._id,
+    name: user.name,
+    isAdmin: user.isAdmin
+  }
+});
 
   } catch (err) {
     res.status(500).json({
@@ -161,9 +195,11 @@ app.get('/leaderboard', async (req, res) => {
 
 
 // ================= ADMIN: UPDATE POINTS =================
-app.post('/update-points', async (req, res) => {
+app.post('/update-points', authMiddleware, async (req, res) => {
   try {
-    const { userId, targetUserId, points } = req.body;
+    const { targetUserId, points } = req.body;
+
+    const userId = req.user.userId;
 
     // ✅ Validation
     if (!userId || !targetUserId || points === undefined) {
@@ -218,9 +254,12 @@ app.post('/update-points', async (req, res) => {
 });
 // ================= ADMIN: SET MATCH =================
 
-app.post('/set-match', async (req, res) => {
+app.post('/set-match', authMiddleware, async (req, res) => {
   try {
-    const { userId, teamA, teamB, date } = req.body;
+    console.log("REQ.USER:", req.user);
+    const { teamA, teamB, date } = req.body;
+
+    const userId = req.user.userId;
 
     // ✅ Validation
     if (!teamA || !teamB || !date) {
@@ -231,6 +270,7 @@ app.post('/set-match', async (req, res) => {
     }
 
     const admin = await User.findById(userId);
+    console.log("DB USER:", admin); // ✅ add this too
 
     if (!admin || !admin.isAdmin) {
       return res.status(403).json({
