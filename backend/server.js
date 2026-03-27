@@ -6,7 +6,7 @@ import dotenv from 'dotenv';
 import dns from 'dns';
 import Match from './models/Match.js';
 import User from './models/User.js';
-import Poll from './models/Poll.js';
+import Poll from './models/Polls.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 

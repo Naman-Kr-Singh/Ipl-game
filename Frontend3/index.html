@@ -34,6 +34,42 @@
     z-index: 0;
   }
 
+  /* ===== FORCE LOGIN SCREEN ===== */
+  #loginScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: linear-gradient(160deg, #001a5c 0%, #003087 40%, #001240 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+    overflow-y: auto;
+  }
+  #loginScreen .ls-logo {
+    font-size: 52px;
+    margin-bottom: 12px;
+  }
+  #loginScreen .ls-brand {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 52px;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, #fff 0%, var(--ipl-gold) 55%, var(--ipl-orange) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 4px;
+  }
+  #loginScreen .ls-tag {
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    color: rgba(255,255,255,0.38);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  /* ===== SHELL (main app) ===== */
   .shell {
     position: relative;
     z-index: 1;
@@ -51,24 +87,11 @@
     padding: 20px 32px;
     border-bottom: 1px solid rgba(255,255,255,0.06);
   }
-
   .nav-logo { display: flex; align-items: center; gap: 14px; }
-
-  .nav-logo-img {
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    border: 1.5px solid rgba(247,168,0,0.4);
-    object-fit: cover;
-    background: rgba(255,255,255,0.08);
-    flex-shrink: 0;
-    animation: pulse-glow 3s ease-in-out infinite;
-  }
-
   @keyframes pulse-glow {
     0%,100% { box-shadow: 0 0 12px rgba(247,168,0,0.2); }
     50%      { box-shadow: 0 0 24px rgba(247,168,0,0.45); }
   }
-
   .nav-brand {
     font-family: 'Bebas Neue', cursive;
     font-size: 28px;
@@ -79,9 +102,7 @@
     background-clip: text;
     line-height: 1;
   }
-
   .nav-right { display: flex; align-items: center; gap: 12px; }
-
   .nav-user-pill {
     display: flex;
     align-items: center;
@@ -97,7 +118,6 @@
     transition: background 0.2s;
   }
   .nav-user-pill:hover { background: rgba(247,168,0,0.18); }
-
   .hamburger {
     background: rgba(255,255,255,0.08);
     border: 1.5px solid rgba(255,255,255,0.15);
@@ -131,7 +151,6 @@
     width: 100%;
     margin: 0 auto;
   }
-
   .hero {
     display: flex;
     flex-direction: column;
@@ -140,7 +159,6 @@
     position: sticky;
     top: 32px;
   }
-
   .logo-ring {
     width: 110px; height: 110px;
     border-radius: 50%;
@@ -151,8 +169,6 @@
     animation: pulse-glow 3s ease-in-out infinite;
     font-size: 48px;
   }
-  .logo-ring img { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; }
-
   .brand-name {
     font-family: 'Bebas Neue', cursive;
     font-size: 64px; letter-spacing: 4px; line-height: 1;
@@ -161,14 +177,11 @@
     filter: drop-shadow(0 2px 12px rgba(247,168,0,0.25));
     margin-bottom: 8px;
   }
-
   .brand-tagline {
     font-size: 11px; letter-spacing: 2.5px;
     color: rgba(255,255,255,0.4); text-transform: uppercase; margin-bottom: 28px;
   }
-
   .hero-desc { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.7; max-width: 240px; }
-
   .season-pill {
     margin-top: 24px;
     display: inline-flex; align-items: center; gap: 8px;
@@ -182,13 +195,12 @@
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
 
   /* ===== CARDS ===== */
-  .cards-section { display: flex; flex-direction: column; gap: 0; }
+  .cards-section { display: flex; flex-direction: column; }
   .section-label {
     font-family: 'Bebas Neue', cursive; font-size: 13px;
     letter-spacing: 3px; color: var(--ipl-gold); opacity: 0.7; margin-bottom: 18px;
   }
   .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
   .card {
     border-radius: var(--card-radius); padding: 24px 22px 22px;
     cursor: pointer; position: relative; overflow: hidden;
@@ -204,29 +216,24 @@
   }
   .card:hover { transform: translateY(-5px) scale(1.02); border-color: rgba(247,168,0,0.3); }
   .card:active { transform: scale(0.97); }
-
-  .card-match       { background: linear-gradient(145deg, rgba(240,90,40,0.22) 0%, rgba(180,30,0,0.12) 100%); box-shadow: 0 8px 32px rgba(240,90,40,0.18); }
+  .card-match { background: linear-gradient(145deg, rgba(240,90,40,0.22) 0%, rgba(180,30,0,0.12) 100%); box-shadow: 0 8px 32px rgba(240,90,40,0.18); }
   .card-match:hover { box-shadow: 0 18px 44px rgba(240,90,40,0.32); }
-  .card-leaderboard       { background: linear-gradient(145deg, rgba(247,168,0,0.2) 0%, rgba(180,110,0,0.1) 100%); box-shadow: 0 8px 32px rgba(247,168,0,0.14); }
+  .card-leaderboard { background: linear-gradient(145deg, rgba(247,168,0,0.2) 0%, rgba(180,110,0,0.1) 100%); box-shadow: 0 8px 32px rgba(247,168,0,0.14); }
   .card-leaderboard:hover { box-shadow: 0 18px 44px rgba(247,168,0,0.28); }
-  .card-achievements       { background: linear-gradient(145deg, rgba(0,200,100,0.18) 0%, rgba(0,130,60,0.09) 100%); box-shadow: 0 8px 32px rgba(0,200,100,0.1); }
+  .card-achievements { background: linear-gradient(145deg, rgba(0,200,100,0.18) 0%, rgba(0,130,60,0.09) 100%); box-shadow: 0 8px 32px rgba(0,200,100,0.1); }
   .card-achievements:hover { box-shadow: 0 18px 44px rgba(0,200,100,0.22); }
-  .card-players       { background: linear-gradient(145deg, rgba(100,130,255,0.2) 0%, rgba(50,70,200,0.1) 100%); box-shadow: 0 8px 32px rgba(100,130,255,0.14); }
+  .card-players { background: linear-gradient(145deg, rgba(100,130,255,0.2) 0%, rgba(50,70,200,0.1) 100%); box-shadow: 0 8px 32px rgba(100,130,255,0.14); }
   .card-players:hover { box-shadow: 0 18px 44px rgba(100,130,255,0.28); }
-
   .card-emoji { font-size: 34px; line-height: 1; }
   .card-title { font-family: 'Bebas Neue', cursive; font-size: 22px; letter-spacing: 1px; color: #fff; line-height: 1.1; }
   .card-sub { font-size: 12px; color: rgba(255,255,255,0.48); font-weight: 500; line-height: 1.5; margin-top: auto; }
-
   .live-badge {
     display: inline-flex; align-items: center; gap: 5px;
-    background: rgba(240,90,40,0.28);
-    border: 1px solid rgba(240,90,40,0.5);
+    background: rgba(240,90,40,0.28); border: 1px solid rgba(240,90,40,0.5);
     border-radius: 20px; padding: 3px 10px;
     font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: #FF8055;
   }
   .live-dot { width: 6px; height: 6px; background: #FF5533; border-radius: 50%; animation: blink 1s ease-in-out infinite; }
-
   .card { animation: card-in 0.45s ease both; }
   .cards-grid .card:nth-child(1) { animation-delay: 0.05s; }
   .cards-grid .card:nth-child(2) { animation-delay: 0.12s; }
@@ -239,14 +246,14 @@
   /* ===== SLIDE MENU ===== */
   .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,20,0.55); z-index: 998; backdrop-filter: blur(2px); }
   .overlay.open { display: block; }
-
   .slide-menu {
-    position: fixed; top: 0; right: -100%; width: 280px; height: 100vh;
+    position: fixed; top: 0; right: -100%; width: 300px; height: 100vh;
     background: linear-gradient(160deg, #001a5c 0%, #002a7a 100%);
     border-left: 1px solid rgba(247,168,0,0.25); z-index: 999;
     transition: right 0.32s cubic-bezier(0.4,0,0.2,1);
     padding: 80px 0 40px; display: flex; flex-direction: column;
     box-shadow: -8px 0 48px rgba(0,0,0,0.55);
+    overflow-y: auto;
   }
   .slide-menu.open { right: 0; }
   .menu-close {
@@ -260,23 +267,43 @@
   .menu-close:hover { background: rgba(255,255,255,0.18); }
   .menu-label {
     font-family: 'Bebas Neue', cursive; font-size: 11px;
-    letter-spacing: 3px; color: var(--ipl-gold); padding: 0 32px 14px; opacity: 0.65;
+    letter-spacing: 3px; color: var(--ipl-gold); padding: 0 28px 12px; opacity: 0.65;
   }
   .menu-item {
-    display: flex; align-items: center; gap: 16px;
-    padding: 17px 32px; font-size: 17px; font-weight: 600;
+    display: flex; align-items: center; gap: 14px;
+    padding: 15px 28px; font-size: 16px; font-weight: 600;
     color: #fff; cursor: pointer;
     border-left: 3px solid transparent; transition: all 0.18s;
   }
   .menu-item:hover { background: rgba(247,168,0,0.07); border-left-color: var(--ipl-gold); color: var(--ipl-gold); }
   .menu-icon {
-    width: 38px; height: 38px; border-radius: 10px;
+    width: 36px; height: 36px; border-radius: 10px;
     background: rgba(255,255,255,0.07);
     display: flex; align-items: center; justify-content: center;
-    font-size: 17px; flex-shrink: 0; transition: background 0.18s;
+    font-size: 16px; flex-shrink: 0; transition: background 0.18s;
   }
   .menu-item:hover .menu-icon { background: rgba(247,168,0,0.14); }
-  .menu-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 6px 32px; }
+  .menu-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 4px 28px; }
+
+  /* Admin badge in menu */
+  .menu-admin-section {
+    margin: 8px 0;
+    border-top: 1px solid rgba(247,168,0,0.15);
+    padding-top: 12px;
+  }
+  .menu-admin-label {
+    font-family: 'Bebas Neue', cursive; font-size: 11px;
+    letter-spacing: 3px; color: var(--ipl-gold); padding: 0 28px 10px; opacity: 0.65;
+  }
+  .menu-item-admin { border-left-color: transparent; }
+  .menu-item-admin:hover { border-left-color: #F7A800; }
+  .admin-locked {
+    padding: 14px 28px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.3);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .admin-locked-icon { font-size: 18px; opacity: 0.5; }
 
   /* ===== PAGES ===== */
   .page {
@@ -306,6 +333,62 @@
   }
   .page-msg { font-size: 14px; color: rgba(255,255,255,0.42); max-width: 260px; line-height: 1.65; text-align: center; }
 
+  /* ===== AUTH FORM (shared between login screen and login page) ===== */
+  .auth-box {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px; padding: 32px; width: 100%; max-width: 400px;
+  }
+  .auth-tabs { display: flex; gap: 0; margin-bottom: 24px; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+  .auth-tab {
+    flex: 1; padding: 10px; text-align: center;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    background: transparent; color: rgba(255,255,255,0.4);
+    transition: all 0.2s; border: none;
+  }
+  .auth-tab.active { background: rgba(247,168,0,0.15); color: var(--ipl-gold); }
+  .auth-field { margin-bottom: 14px; }
+  .auth-field label { display: block; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.45); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 7px; }
+  .auth-field input, .auth-field select {
+    width: 100%; padding: 12px 16px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px; color: #fff; font-size: 15px;
+    font-family: 'Barlow', sans-serif; outline: none; transition: border-color 0.2s;
+  }
+  .auth-field input:focus, .auth-field select:focus { border-color: rgba(247,168,0,0.5); }
+  .auth-field input::placeholder { color: rgba(255,255,255,0.22); }
+  .auth-field select {
+    cursor: pointer; appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(247,168,0,0.7)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center;
+    background-color: rgba(255,255,255,0.07); padding-right: 40px;
+  }
+  .auth-field select option { background: #002a7a; color: #fff; font-size: 15px; }
+  .auth-field select option:disabled { color: rgba(255,255,255,0.3); }
+  .auth-btn {
+    width: 100%; padding: 14px; margin-top: 8px;
+    background: linear-gradient(135deg, var(--ipl-gold) 0%, var(--ipl-orange) 100%);
+    border: none; border-radius: 12px;
+    font-family: 'Bebas Neue', cursive; font-size: 20px; letter-spacing: 2px;
+    color: #001240; cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .auth-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .auth-btn:active { transform: scale(0.98); }
+  .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .auth-msg { margin-top: 14px; text-align: center; font-size: 13px; min-height: 20px; }
+  .auth-msg.error { color: #ff6b6b; }
+  .auth-msg.success { color: #4ade80; }
+  .logout-btn {
+    margin-top: 16px; padding: 10px 28px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px; color: rgba(255,255,255,0.6);
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+  }
+  .logout-btn:hover { background: rgba(255,80,80,0.15); border-color: rgba(255,80,80,0.3); color: #ff8888; }
+
   /* ===== MATCH PAGE ===== */
   .match-card {
     background: rgba(255,255,255,0.05);
@@ -315,26 +398,61 @@
     width: 100%; max-width: 480px;
     text-align: center;
   }
-  .match-vs {
-    display: flex; align-items: center; justify-content: center; gap: 20px;
-    margin-bottom: 24px;
-  }
+  .match-vs { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 24px; }
   .match-team {
-    font-family: 'Bebas Neue', cursive; font-size: 42px;
-    letter-spacing: 2px;
+    font-family: 'Bebas Neue', cursive; font-size: 42px; letter-spacing: 2px;
     background: linear-gradient(135deg, #fff 0%, var(--ipl-gold) 100%);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
-  .match-vs-text {
-    font-size: 16px; font-weight: 700; color: rgba(255,255,255,0.3); letter-spacing: 2px;
+  .match-vs-text { font-size: 16px; font-weight: 700; color: rgba(255,255,255,0.3); letter-spacing: 2px; }
+  .match-date { font-size: 13px; color: rgba(255,255,255,0.45); margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .no-match { color: rgba(255,255,255,0.38); font-size: 15px; text-align: center; padding: 24px 0; }
+
+  /* ===== POLL SECTION ===== */
+  .poll-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(247,168,0,0.2);
+    border-radius: 16px;
+    padding: 24px 28px;
+    width: 100%; max-width: 480px;
+    margin-top: 20px;
   }
-  .match-date {
-    font-size: 13px; color: rgba(255,255,255,0.45); margin-top: 8px;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
+  .poll-question {
+    font-size: 16px; font-weight: 600;
+    color: #fff; margin-bottom: 16px;
   }
-  .no-match {
-    color: rgba(255,255,255,0.38); font-size: 15px; text-align: center; padding: 24px 0;
+  .poll-timer {
+    font-size: 11px; color: var(--ipl-gold);
+    letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 16px; opacity: 0.8;
   }
+  .poll-option {
+    position: relative;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    overflow: hidden;
+  }
+  .poll-option:hover { border-color: rgba(247,168,0,0.4); background: rgba(247,168,0,0.06); }
+  .poll-option.voted-this { border-color: var(--ipl-gold); background: rgba(247,168,0,0.1); }
+  .poll-option-bar {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: rgba(247,168,0,0.12);
+    border-radius: 10px;
+    transition: width 0.6s ease;
+    z-index: 0;
+  }
+  .poll-option-label {
+    position: relative; z-index: 1;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 14px; font-weight: 500;
+  }
+  .poll-option-pct { font-size: 12px; color: var(--ipl-gold); font-weight: 700; }
+  .poll-voted-msg { font-size: 12px; color: rgba(255,255,255,0.38); text-align: center; margin-top: 12px; }
 
   /* ===== LEADERBOARD PAGE ===== */
   .leaderboard-table { width: 100%; max-width: 560px; }
@@ -349,98 +467,15 @@
   .lb-row.top-1 { border-color: rgba(247,168,0,0.4); background: rgba(247,168,0,0.08); }
   .lb-row.top-2 { border-color: rgba(200,200,210,0.3); background: rgba(200,200,210,0.05); }
   .lb-row.top-3 { border-color: rgba(205,130,50,0.3); background: rgba(205,130,50,0.05); }
-  .lb-rank {
-    font-family: 'Bebas Neue', cursive; font-size: 22px;
-    color: rgba(255,255,255,0.3); width: 28px; text-align: center; flex-shrink: 0;
-  }
+  .lb-rank { font-family: 'Bebas Neue', cursive; font-size: 22px; color: rgba(255,255,255,0.3); width: 28px; text-align: center; flex-shrink: 0; }
   .lb-row.top-1 .lb-rank { color: var(--ipl-gold); }
   .lb-row.top-2 .lb-rank { color: #C8C8D2; }
   .lb-row.top-3 .lb-rank { color: #CD8232; }
   .lb-medal { font-size: 22px; flex-shrink: 0; }
-  .lb-name { flex: 1; font-size: 16px; font-weight: 600; }
+  .lb-name { font-size: 16px; font-weight: 600; }
   .lb-team { font-size: 12px; color: rgba(255,255,255,0.38); margin-top: 2px; }
-  .lb-points {
-    font-family: 'Bebas Neue', cursive; font-size: 28px;
-    color: var(--ipl-gold); letter-spacing: 1px;
-  }
+  .lb-points { font-family: 'Bebas Neue', cursive; font-size: 28px; color: var(--ipl-gold); letter-spacing: 1px; }
   .lb-pts-label { font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 1px; text-transform: uppercase; text-align: right; }
-
-  /* ===== LOGIN/SIGNUP PAGE ===== */
-  .auth-box {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 20px; padding: 36px; width: 100%; max-width: 400px;
-  }
-  .auth-tabs { display: flex; gap: 0; margin-bottom: 28px; border-radius: 10px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-  .auth-tab {
-    flex: 1; padding: 10px; text-align: center;
-    font-size: 14px; font-weight: 600; cursor: pointer;
-    background: transparent; color: rgba(255,255,255,0.4);
-    transition: all 0.2s; border: none;
-  }
-  .auth-tab.active { background: rgba(247,168,0,0.15); color: var(--ipl-gold); }
-
-  .auth-field { margin-bottom: 16px; }
-  .auth-field label { display: block; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.45); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
-  .auth-field input {
-    width: 100%; padding: 12px 16px;
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 10px; color: #fff; font-size: 15px;
-    font-family: 'Barlow', sans-serif; outline: none; transition: border-color 0.2s;
-  }
-  .auth-field input:focus { border-color: rgba(247,168,0,0.5); }
-  .auth-field input::placeholder { color: rgba(255,255,255,0.22); }
-
-  /* Dropdown select styling */
-  .auth-field select {
-    width: 100%; padding: 12px 16px;
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 10px; color: #fff; font-size: 15px;
-    font-family: 'Barlow', sans-serif; outline: none;
-    transition: border-color 0.2s;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(247,168,0,0.7)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 14px center;
-    background-color: rgba(255,255,255,0.07);
-    padding-right: 40px;
-  }
-  .auth-field select:focus { border-color: rgba(247,168,0,0.5); }
-  .auth-field select option {
-    background: #002a7a;
-    color: #fff;
-    font-size: 15px;
-  }
-  .auth-field select option:disabled { color: rgba(255,255,255,0.3); }
-
-  .auth-btn {
-    width: 100%; padding: 14px; margin-top: 8px;
-    background: linear-gradient(135deg, var(--ipl-gold) 0%, var(--ipl-orange) 100%);
-    border: none; border-radius: 12px;
-    font-family: 'Bebas Neue', cursive; font-size: 20px; letter-spacing: 2px;
-    color: #001240; cursor: pointer;
-    transition: opacity 0.2s, transform 0.15s;
-  }
-  .auth-btn:hover { opacity: 0.9; transform: translateY(-1px); }
-  .auth-btn:active { transform: scale(0.98); }
-  .auth-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-  .auth-msg { margin-top: 14px; text-align: center; font-size: 13px; min-height: 20px; }
-  .auth-msg.error { color: #ff6b6b; }
-  .auth-msg.success { color: #4ade80; }
-
-  .logout-btn {
-    margin-top: 16px; padding: 10px 28px;
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 10px; color: rgba(255,255,255,0.6);
-    font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
-  }
-  .logout-btn:hover { background: rgba(255,80,80,0.15); border-color: rgba(255,80,80,0.3); color: #ff8888; }
 
   /* ===== PLAYERS PAGE ===== */
   .players-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; max-width: 560px; }
@@ -452,45 +487,108 @@
   }
   .player-name { font-size: 15px; font-weight: 700; }
   .player-team { font-size: 12px; color: rgba(255,255,255,0.38); }
-  .player-pts {
-    margin-top: 8px; font-family: 'Bebas Neue', cursive;
-    font-size: 26px; color: var(--ipl-gold); letter-spacing: 1px;
-  }
+  .player-pts { margin-top: 8px; font-family: 'Bebas Neue', cursive; font-size: 26px; color: var(--ipl-gold); letter-spacing: 1px; }
   .player-pts-label { font-size: 10px; color: rgba(255,255,255,0.28); text-transform: uppercase; letter-spacing: 1px; }
 
-  /* ===== SPINNER ===== */
-  .spinner {
-    width: 36px; height: 36px; margin: 40px auto;
-    border: 3px solid rgba(247,168,0,0.15);
-    border-top-color: var(--ipl-gold);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
+  /* ===== CONTROL PANEL ===== */
+  .cp-wrap { width: 100%; max-width: 520px; }
+  .cp-section {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 18px;
+    padding: 24px 26px;
+    margin-bottom: 20px;
   }
+  .cp-section-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 20px; letter-spacing: 2px;
+    color: var(--ipl-gold);
+    margin-bottom: 18px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .cp-field { margin-bottom: 14px; }
+  .cp-field label { display: block; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.45); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 7px; }
+  .cp-field input, .cp-field select {
+    width: 100%; padding: 11px 14px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px; color: #fff; font-size: 14px;
+    font-family: 'Barlow', sans-serif; outline: none; transition: border-color 0.2s;
+  }
+  .cp-field input:focus, .cp-field select:focus { border-color: rgba(247,168,0,0.5); }
+  .cp-field select {
+    cursor: pointer; appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(247,168,0,0.7)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center;
+    background-color: rgba(255,255,255,0.07); padding-right: 40px;
+  }
+  .cp-field select option { background: #002a7a; color: #fff; }
+  .cp-field select option:disabled { color: rgba(255,255,255,0.3); }
+  .cp-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .cp-btn {
+    width: 100%; padding: 12px;
+    background: linear-gradient(135deg, var(--ipl-gold) 0%, var(--ipl-orange) 100%);
+    border: none; border-radius: 10px;
+    font-family: 'Bebas Neue', cursive; font-size: 18px; letter-spacing: 2px;
+    color: #001240; cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+    margin-top: 4px;
+  }
+  .cp-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .cp-btn:active { transform: scale(0.98); }
+  .cp-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .cp-msg { margin-top: 12px; font-size: 13px; text-align: center; min-height: 18px; }
+  .cp-msg.error { color: #ff6b6b; }
+  .cp-msg.success { color: #4ade80; }
+
+  /* User dropdown in add-points */
+  .user-select-row { display: flex; align-items: center; gap: 10px; }
+  .pts-signed { display: flex; gap: 8px; }
+  .pts-btn {
+    flex: 1; padding: 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px; color: #fff; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: all 0.18s; text-align: center;
+  }
+  .pts-btn:hover { border-color: rgba(247,168,0,0.4); background: rgba(247,168,0,0.08); }
+  .pts-btn.selected-pos { background: rgba(74,222,128,0.15); border-color: #4ade80; color: #4ade80; }
+  .pts-btn.selected-neg { background: rgba(255,107,107,0.15); border-color: #ff6b6b; color: #ff6b6b; }
+
+  /* Non-admin locked panel */
+  .cp-locked {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 18px;
+    padding: 40px 24px;
+    text-align: center;
+    width: 100%; max-width: 400px;
+  }
+  .cp-locked-icon { font-size: 52px; margin-bottom: 16px; }
+  .cp-locked-title {
+    font-family: 'Bebas Neue', cursive; font-size: 26px;
+    letter-spacing: 2px; color: rgba(255,255,255,0.4);
+    margin-bottom: 8px;
+  }
+  .cp-locked-msg { font-size: 13px; color: rgba(255,255,255,0.25); }
+
+  /* ===== SPINNER ===== */
+  .spinner { width: 36px; height: 36px; margin: 40px auto; border: 3px solid rgba(247,168,0,0.15); border-top-color: var(--ipl-gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
   /* ===== RULES PAGE ===== */
   .rules-list { width: 100%; max-width: 480px; text-align: left; }
-  .rule-item {
-    display: flex; gap: 14px; padding: 16px;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 12px; margin-bottom: 10px; align-items: flex-start;
-  }
-  .rule-num {
-    font-family: 'Bebas Neue', cursive; font-size: 20px;
-    color: var(--ipl-gold); flex-shrink: 0; width: 24px;
-  }
+  .rule-item { display: flex; gap: 14px; padding: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; margin-bottom: 10px; align-items: flex-start; }
+  .rule-num { font-family: 'Bebas Neue', cursive; font-size: 20px; color: var(--ipl-gold); flex-shrink: 0; width: 24px; }
   .rule-text { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.6; }
 
   /* ===== RESPONSIVE ===== */
   @media (max-width: 700px) {
     .navbar { padding: 16px 20px; }
     .nav-brand { font-size: 22px; }
-    .nav-logo-img { width: 32px; height: 32px; }
     .main { grid-template-columns: 1fr; padding: 28px 20px 60px; gap: 32px 0; }
     .hero { align-items: center; text-align: center; position: static; padding-top: 0; }
     .logo-ring { width: 90px; height: 90px; }
-    .logo-ring img { width: 70px; height: 70px; }
     .brand-name { font-size: 52px; }
     .hero-desc { max-width: 280px; text-align: center; }
     .cards-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -499,18 +597,81 @@
     .card-emoji { font-size: 28px; }
     .players-grid { grid-template-columns: 1fr 1fr; }
     .match-team { font-size: 32px; }
-    .nav-user-pill span.pill-name { display: none; }
+    .cp-row { grid-template-columns: 1fr; }
   }
   @media (max-width: 400px) {
     .cards-grid { grid-template-columns: 1fr; }
-    .card { min-height: 120px; }
     .players-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
+<!-- ===== FORCE LOGIN SCREEN ===== -->
+<div id="loginScreen">
+  <div class="ls-logo">🏏</div>
+  <div class="ls-brand">Sattebazi</div>
+  <div class="ls-tag">IPL Fantasy Prediction League</div>
+
+  <div class="auth-box">
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="lsTabLogin" onclick="lsSwitchTab('login')">Login</button>
+      <button class="auth-tab" id="lsTabSignup" onclick="lsSwitchTab('signup')">Sign Up</button>
+    </div>
+
+    <!-- Login form -->
+    <div id="lsLoginForm">
+      <div class="auth-field">
+        <label>Username</label>
+        <input type="text" id="lsLoginName" placeholder="Enter your username" />
+      </div>
+      <div class="auth-field">
+        <label>Password</label>
+        <input type="password" id="lsLoginPass" placeholder="Enter your password"
+          onkeydown="if(event.key==='Enter') doLsLogin()" />
+      </div>
+      <button class="auth-btn" onclick="doLsLogin()">Login</button>
+    </div>
+
+    <!-- Signup form -->
+    <div id="lsSignupForm" style="display:none;">
+      <div class="auth-field">
+        <label>Username</label>
+        <input type="text" id="lsSignupName" placeholder="Choose a username" />
+      </div>
+      <div class="auth-field">
+        <label>Password</label>
+        <input type="password" id="lsSignupPass" placeholder="Choose a password" />
+      </div>
+      <div class="auth-field">
+        <label>Favourite IPL Team</label>
+        <select id="lsSignupTeam">
+          <option value="" disabled selected>Select your favourite team</option>
+          <option value="Chennai Super Kings">💛 Chennai Super Kings (CSK)</option>
+          <option value="Delhi Capitals">🩵 Delhi Capitals (DC)</option>
+          <option value="Gujarat Titans">💙 Gujarat Titans (GT)</option>
+          <option value="Kolkata Knight Riders">💜 Kolkata Knight Riders (KKR)</option>
+          <option value="Lucknow Super Giants">🩵 Lucknow Super Giants (LSG)</option>
+          <option value="Mumbai Indians">💙 Mumbai Indians (MI)</option>
+          <option value="Punjab Kings">❤️ Punjab Kings (PBKS)</option>
+          <option value="Rajasthan Royals">💗 Rajasthan Royals (RR)</option>
+          <option value="Royal Challengers Bengaluru">❤️ Royal Challengers Bengaluru (RCB)</option>
+          <option value="Sunrisers Hyderabad">🧡 Sunrisers Hyderabad (SRH)</option>
+        </select>
+      </div>
+      <button class="auth-btn" onclick="doLsSignup()">Create Account</button>
+    </div>
+
+    <div class="auth-msg" id="lsMsg"></div>
+  </div>
+</div>
+
+<!-- ===== MAIN APP (hidden until logged in) ===== -->
+<div id="appWrapper" style="display:none;">
+
 <div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+<!-- SLIDE MENU -->
 <nav class="slide-menu" id="slideMenu">
   <button class="menu-close" onclick="closeMenu()">✕</button>
   <div class="menu-label">Navigate</div>
@@ -519,11 +680,20 @@
   </div>
   <div class="menu-divider"></div>
   <div class="menu-item" id="menuAuthItem" onclick="openPage('login')">
-    <div class="menu-icon">🔐</div><span id="menuAuthLabel">Login</span>
+    <div class="menu-icon">🔐</div><span id="menuAuthLabel">Account</span>
+  </div>
+
+  <!-- CONTROL PANEL section in menu -->
+  <div class="menu-admin-section">
+    <div class="menu-admin-label">Admin</div>
+    <div class="menu-item menu-item-admin" onclick="openPage('control')">
+      <div class="menu-icon">⚙️</div><span>Control Panel</span>
+    </div>
   </div>
 </nav>
 
 <div class="shell">
+  <!-- NAVBAR -->
   <header class="navbar">
     <div class="nav-logo">
       <div style="width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(247,168,0,0.4);background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:20px;animation:pulse-glow 3s ease-in-out infinite;">🏏</div>
@@ -532,7 +702,7 @@
     <div class="nav-right">
       <div class="nav-user-pill" id="navUserPill" style="display:none" onclick="openPage('login')">
         <span>👤</span>
-        <span class="pill-name" id="navUserName"></span>
+        <span id="navUserName"></span>
       </div>
       <div class="hamburger" id="hamburger" onclick="toggleMenu()">
         <span></span><span></span><span></span>
@@ -546,9 +716,7 @@
       <div class="brand-name">Sattebazi</div>
       <div class="brand-tagline">IPL Fantasy Prediction League</div>
       <p class="hero-desc">Pick your winners, predict match outcomes, and climb the leaderboard with your cricket instincts.</p>
-      <div class="season-pill">
-        <span class="season-dot"></span> IPL 2025 Season
-      </div>
+      <div class="season-pill"><span class="season-dot"></span> IPL 2025 Season</div>
     </aside>
 
     <section class="cards-section">
@@ -586,6 +754,7 @@
   <div class="page-icon">🏏</div>
   <div class="page-title">Today's Match</div>
   <div id="match-content"><div class="spinner"></div></div>
+  <div id="poll-content" style="width:100%;display:flex;flex-direction:column;align-items:center;"></div>
 </div>
 
 <!-- ===== LEADERBOARD PAGE ===== -->
@@ -626,110 +795,56 @@
   </div>
 </div>
 
-<!-- ===== LOGIN/SIGNUP PAGE ===== -->
+<!-- ===== LOGIN / ACCOUNT PAGE ===== -->
 <div class="page" id="page-login">
   <div class="page-back" onclick="closePage()">←</div>
   <div class="page-icon">🔐</div>
-  <div class="page-title" id="authPageTitle">Login</div>
-
-  <!-- Logged-in state -->
-  <div id="loggedInView" style="display:none; text-align:center;">
+  <div class="page-title" id="authPageTitle">Account</div>
+  <div id="loggedInView" style="text-align:center;">
     <p style="font-size:18px; font-weight:600;" id="loggedInName"></p>
     <p style="font-size:13px; color:rgba(255,255,255,0.38); margin-top:6px;" id="loggedInRole"></p>
     <button class="logout-btn" onclick="logout()">Logout</button>
   </div>
-
-  <!-- Auth form -->
-  <div id="authFormView" class="auth-box">
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Login</button>
-      <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Sign Up</button>
-    </div>
-
-    <!-- Login form -->
-    <div id="loginForm">
-      <div class="auth-field">
-        <label>Username</label>
-        <input type="text" id="loginName" placeholder="Enter your username" />
-      </div>
-      <div class="auth-field">
-        <label>Password</label>
-        <input type="password" id="loginPass" placeholder="Enter your password" />
-      </div>
-      <button class="auth-btn" onclick="doLogin()">Login</button>
-    </div>
-
-    <!-- Signup form -->
-    <div id="signupForm" style="display:none;">
-      <div class="auth-field">
-        <label>Username</label>
-        <input type="text" id="signupName" placeholder="Choose a username" />
-      </div>
-      <div class="auth-field">
-        <label>Password</label>
-        <input type="password" id="signupPass" placeholder="Choose a password" />
-      </div>
-      <div class="auth-field">
-        <label>Favourite IPL Team</label>
-        <select id="signupTeam">
-          <option value="" disabled selected>Select your favourite team</option>
-          <option value="Chennai Super Kings">💛 Chennai Super Kings (CSK)</option>
-          <option value="Delhi Capitals">🩵 Delhi Capitals (DC)</option>
-          <option value="Gujarat Titans">💙 Gujarat Titans (GT)</option>
-          <option value="Kolkata Knight Riders">💜 Kolkata Knight Riders (KKR)</option>
-          <option value="Lucknow Super Giants">🩵 Lucknow Super Giants (LSG)</option>
-          <option value="Mumbai Indians">💙 Mumbai Indians (MI)</option>
-          <option value="Punjab Kings">❤️ Punjab Kings (PBKS)</option>
-          <option value="Rajasthan Royals">💗 Rajasthan Royals (RR)</option>
-          <option value="Royal Challengers Bengaluru">❤️ Royal Challengers Bengaluru (RCB)</option>
-          <option value="Sunrisers Hyderabad">🧡 Sunrisers Hyderabad (SRH)</option>
-        </select>
-      </div>
-      <button class="auth-btn" onclick="doSignup()">Create Account</button>
-    </div>
-
-    <div class="auth-msg" id="authMsg"></div>
-  </div>
 </div>
 
+<!-- ===== CONTROL PANEL PAGE ===== -->
+<div class="page" id="page-control">
+  <div class="page-back" onclick="closePage()">←</div>
+  <div class="page-icon">⚙️</div>
+  <div class="page-title">Control Panel</div>
+  <div id="control-content" style="width:100%;display:flex;flex-direction:column;align-items:center;"></div>
+</div>
+
+</div><!-- end appWrapper -->
+
 <script>
-  // ===== CONFIG =====
   const API = 'http://localhost:5000';
 
-  // ===== TEAM HEART MAP =====
-  const teamHearts = {
-    'Chennai Super Kings': '💛',
-    'CSK': '💛',
-    'Delhi Capitals': '🩵',
-    'DC': '🩵',
-    'Gujarat Titans': '💙',
-    'GT': '💙',
-    'Kolkata Knight Riders': '💜',
-    'KKR': '💜',
-    'Lucknow Super Giants': '🩵',
-    'LSG': '🩵',
-    'Mumbai Indians': '💙',
-    'MI': '💙',
-    'Punjab Kings': '❤️',
-    'PBKS': '❤️',
-    'Rajasthan Royals': '💗',
-    'RR': '💗',
-    'Royal Challengers Bengaluru': '❤️',
-    'RCB': '❤️',
-    'Sunrisers Hyderabad': '🧡',
-    'SRH': '🧡'
-  };
+  const IPL_TEAMS = [
+    { value: 'Chennai Super Kings',        label: '💛 Chennai Super Kings (CSK)' },
+    { value: 'Delhi Capitals',             label: '🩵 Delhi Capitals (DC)' },
+    { value: 'Gujarat Titans',             label: '💙 Gujarat Titans (GT)' },
+    { value: 'Kolkata Knight Riders',      label: '💜 Kolkata Knight Riders (KKR)' },
+    { value: 'Lucknow Super Giants',       label: '🩵 Lucknow Super Giants (LSG)' },
+    { value: 'Mumbai Indians',             label: '💙 Mumbai Indians (MI)' },
+    { value: 'Punjab Kings',               label: '❤️ Punjab Kings (PBKS)' },
+    { value: 'Rajasthan Royals',           label: '💗 Rajasthan Royals (RR)' },
+    { value: 'Royal Challengers Bengaluru',label: '❤️ Royal Challengers Bengaluru (RCB)' },
+    { value: 'Sunrisers Hyderabad',        label: '🧡 Sunrisers Hyderabad (SRH)' },
+  ];
 
-  function getTeamHeart(teamName) {
-    if (!teamName) return '❤️';
-    // Try exact match first
-    if (teamHearts[teamName]) return teamHearts[teamName];
-    // Try to find by abbreviation or partial match
-    const upper = teamName.toUpperCase();
-    for (const [key, heart] of Object.entries(teamHearts)) {
-      if (upper.includes(key.toUpperCase()) || key.toUpperCase().includes(upper)) {
-        return heart;
-      }
+  const teamHearts = {
+    'Chennai Super Kings':'💛','CSK':'💛','Delhi Capitals':'🩵','DC':'🩵',
+    'Gujarat Titans':'💙','GT':'💙','Kolkata Knight Riders':'💜','KKR':'💜',
+    'Lucknow Super Giants':'🩵','LSG':'🩵','Mumbai Indians':'💙','MI':'💙',
+    'Punjab Kings':'❤️','PBKS':'❤️','Rajasthan Royals':'💗','RR':'💗',
+    'Royal Challengers Bengaluru':'❤️','RCB':'❤️','Sunrisers Hyderabad':'🧡','SRH':'🧡'
+  };
+  function getTeamHeart(t) {
+    if (!t) return '❤️';
+    if (teamHearts[t]) return teamHearts[t];
+    for (const [k,v] of Object.entries(teamHearts)) {
+      if (t.toUpperCase().includes(k.toUpperCase())) return v;
     }
     return '❤️';
   }
@@ -738,8 +853,77 @@
   let currentUser = JSON.parse(localStorage.getItem('sattebazi_user') || 'null');
   let authToken   = localStorage.getItem('sattebazi_token') || null;
 
-  // ===== INIT =====
-  updateAuthUI();
+  // ===== BOOT: check if already logged in =====
+  window.addEventListener('DOMContentLoaded', () => {
+    if (currentUser && authToken) {
+      showApp();
+    }
+    // else login screen stays visible
+  });
+
+  function showApp() {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('appWrapper').style.display  = 'block';
+    updateAuthUI();
+  }
+
+  // ===== FORCE LOGIN SCREEN TABS =====
+  function lsSwitchTab(tab) {
+    document.getElementById('lsLoginForm').style.display  = tab === 'login'  ? 'block' : 'none';
+    document.getElementById('lsSignupForm').style.display = tab === 'signup' ? 'block' : 'none';
+    document.getElementById('lsTabLogin').classList.toggle('active',  tab === 'login');
+    document.getElementById('lsTabSignup').classList.toggle('active', tab === 'signup');
+    document.getElementById('lsMsg').textContent = '';
+  }
+  function setLsMsg(msg, type) {
+    const el = document.getElementById('lsMsg');
+    el.textContent = msg;
+    el.className = 'auth-msg ' + (type || '');
+  }
+
+  async function doLsLogin() {
+    const name     = document.getElementById('lsLoginName').value.trim();
+    const password = document.getElementById('lsLoginPass').value;
+    if (!name || !password) return setLsMsg('Fill in all fields.', 'error');
+    setLsMsg('Logging in...', '');
+    try {
+      const res  = await fetch(`${API}/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, password })
+      });
+      const data = await res.json();
+      if (!data.success) return setLsMsg(data.message, 'error');
+      authToken   = data.token;
+      currentUser = data.data;
+      localStorage.setItem('sattebazi_token', authToken);
+      localStorage.setItem('sattebazi_user', JSON.stringify(currentUser));
+      showApp();
+    } catch {
+      setLsMsg('Cannot reach server. Is the backend running?', 'error');
+    }
+  }
+
+  async function doLsSignup() {
+    const name         = document.getElementById('lsSignupName').value.trim();
+    const password     = document.getElementById('lsSignupPass').value;
+    const favoriteTeam = document.getElementById('lsSignupTeam').value;
+    if (!name || !password || !favoriteTeam) return setLsMsg('Fill in all fields.', 'error');
+    setLsMsg('Creating account...', '');
+    try {
+      const res  = await fetch(`${API}/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, password, favoriteTeam })
+      });
+      const data = await res.json();
+      if (!data.success) return setLsMsg(data.message, 'error');
+      setLsMsg('Account created! Please log in.', 'success');
+      lsSwitchTab('login');
+    } catch {
+      setLsMsg('Cannot reach server. Is the backend running?', 'error');
+    }
+  }
 
   // ===== MENU =====
   function toggleMenu() {
@@ -757,10 +941,11 @@
   function openPage(name) {
     closeMenu();
     document.getElementById('page-' + name)?.classList.add('active');
-    if (name === 'match')       loadMatch();
+    if (name === 'match')       { loadMatch(); loadPoll(); }
     if (name === 'leaderboard') loadLeaderboard();
     if (name === 'players')     loadPlayers();
-    if (name === 'login')       renderAuthPage();
+    if (name === 'login')       renderLoginPage();
+    if (name === 'control')     renderControlPanel();
   }
   function closePage() {
     document.querySelectorAll('.page.active').forEach(p => p.classList.remove('active'));
@@ -769,108 +954,36 @@
 
   // ===== AUTH UI =====
   function updateAuthUI() {
-    const pill   = document.getElementById('navUserPill');
-    const nameEl = document.getElementById('navUserName');
-    const menuLabel = document.getElementById('menuAuthLabel');
-
+    const pill = document.getElementById('navUserPill');
     if (currentUser) {
       pill.style.display = 'flex';
-      nameEl.textContent = currentUser.name;
-      menuLabel.textContent = 'Account';
+      document.getElementById('navUserName').textContent = currentUser.name;
+      document.getElementById('menuAuthLabel').textContent = 'Account';
     } else {
       pill.style.display = 'none';
-      menuLabel.textContent = 'Login';
+      document.getElementById('menuAuthLabel').textContent = 'Login';
     }
   }
 
-  function renderAuthPage() {
-    if (currentUser) {
-      document.getElementById('authFormView').style.display = 'none';
-      document.getElementById('loggedInView').style.display = 'block';
-      document.getElementById('loggedInName').textContent = '👋 Hey, ' + currentUser.name + '!';
-      document.getElementById('loggedInRole').textContent = currentUser.isAdmin ? '⭐ Admin' : 'Player';
-      document.getElementById('authPageTitle').textContent = 'Account';
-    } else {
-      document.getElementById('authFormView').style.display = 'block';
-      document.getElementById('loggedInView').style.display = 'none';
-      document.getElementById('authPageTitle').textContent = 'Login';
-    }
+  function renderLoginPage() {
+    document.getElementById('authPageTitle').textContent = 'Account';
+    document.getElementById('loggedInName').textContent  = '👋 Hey, ' + currentUser.name + '!';
+    document.getElementById('loggedInRole').textContent  = currentUser.isAdmin ? '⭐ Admin' : '🏏 Player';
   }
 
-  function switchTab(tab) {
-    document.getElementById('loginForm').style.display  = tab === 'login'  ? 'block' : 'none';
-    document.getElementById('signupForm').style.display = tab === 'signup' ? 'block' : 'none';
-    document.getElementById('tabLogin').classList.toggle('active',  tab === 'login');
-    document.getElementById('tabSignup').classList.toggle('active', tab === 'signup');
-    document.getElementById('authMsg').textContent = '';
-  }
-
-  function setAuthMsg(msg, type) {
-    const el = document.getElementById('authMsg');
-    el.textContent = msg;
-    el.className = 'auth-msg ' + type;
-  }
-
-  // ===== LOGIN =====
-  async function doLogin() {
-    const name     = document.getElementById('loginName').value.trim();
-    const password = document.getElementById('loginPass').value;
-    if (!name || !password) return setAuthMsg('Fill in all fields.', 'error');
-
-    setAuthMsg('Logging in...', '');
-    try {
-      const res  = await fetch(`${API}/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, password })
-      });
-      const data = await res.json();
-      if (!data.success) return setAuthMsg(data.message, 'error');
-
-      authToken   = data.token;
-      currentUser = data.data;
-      localStorage.setItem('sattebazi_token', authToken);
-      localStorage.setItem('sattebazi_user', JSON.stringify(currentUser));
-      updateAuthUI();
-      renderAuthPage();
-      setAuthMsg('', '');
-    } catch {
-      setAuthMsg('Cannot reach server. Is it running?', 'error');
-    }
-  }
-
-  // ===== SIGNUP =====
-  async function doSignup() {
-    const name         = document.getElementById('signupName').value.trim();
-    const password     = document.getElementById('signupPass').value;
-    const favoriteTeam = document.getElementById('signupTeam').value;
-    if (!name || !password || !favoriteTeam) return setAuthMsg('Fill in all fields.', 'error');
-
-    setAuthMsg('Creating account...', '');
-    try {
-      const res  = await fetch(`${API}/signup`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, password, favoriteTeam })
-      });
-      const data = await res.json();
-      if (!data.success) return setAuthMsg(data.message, 'error');
-
-      setAuthMsg('Account created! Please log in.', 'success');
-      switchTab('login');
-    } catch {
-      setAuthMsg('Cannot reach server. Is it running?', 'error');
-    }
-  }
-
-  // ===== LOGOUT =====
   function logout() {
     authToken   = null;
     currentUser = null;
     localStorage.removeItem('sattebazi_token');
     localStorage.removeItem('sattebazi_user');
-    updateAuthUI();
-    renderAuthPage();
+    closePage();
+    document.getElementById('appWrapper').style.display  = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+    // reset login screen fields
+    document.getElementById('lsLoginName').value = '';
+    document.getElementById('lsLoginPass').value = '';
+    document.getElementById('lsMsg').textContent = '';
+    lsSwitchTab('login');
   }
 
   // ===== TODAY'S MATCH =====
@@ -901,6 +1014,63 @@
     }
   }
 
+  // ===== POLL =====
+  async function loadPoll() {
+    const el = document.getElementById('poll-content');
+    el.innerHTML = '';
+    try {
+      const res  = await fetch(`${API}/poll`);
+      const data = await res.json();
+      if (!data.success) return; // no poll or expired → silent
+      renderPoll(data.data, el);
+    } catch { /* silent */ }
+  }
+
+  function renderPoll(poll, el) {
+    const totalVotes = poll.options.reduce((s, o) => s + (o.votes || 0), 0);
+    const myVote = poll.voters?.find(v => v.userId === currentUser._id);
+    const expiry = new Date(poll.expiresAt);
+    const minsLeft = Math.max(0, Math.round((expiry - Date.now()) / 60000));
+    const timeStr  = minsLeft > 60 ? `${Math.round(minsLeft/60)}h left` : `${minsLeft}m left`;
+
+    const optionsHtml = poll.options.map((opt, i) => {
+      const pct   = totalVotes > 0 ? Math.round((opt.votes / totalVotes) * 100) : 0;
+      const isMe  = myVote && poll.voters.findIndex(v => v.userId === currentUser._id) !== -1 && myVote;
+      const showPct = !!myVote;
+      return `
+        <div class="poll-option ${myVote ? '' : ''}" onclick="doVote(${i})" id="popt-${i}">
+          <div class="poll-option-bar" style="width:${showPct ? pct : 0}%"></div>
+          <div class="poll-option-label">
+            <span>${escHtml(opt.text)}</span>
+            ${showPct ? `<span class="poll-option-pct">${pct}%</span>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+
+    el.innerHTML = `
+      <div class="poll-card">
+        <div class="poll-question">🗳️ ${escHtml(poll.question)}</div>
+        <div class="poll-timer">⏱ ${timeStr} · ${totalVotes} vote${totalVotes !== 1 ? 's' : ''}</div>
+        ${optionsHtml}
+        ${myVote ? '<div class="poll-voted-msg">✅ You have voted.</div>' : ''}
+      </div>`;
+  }
+
+  async function doVote(optionIndex) {
+    if (!authToken) return;
+    try {
+      const res  = await fetch(`${API}/vote`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+        body: JSON.stringify({ optionIndex })
+      });
+      const data = await res.json();
+      if (!data.success) return;
+      // re-render poll with updated data
+      renderPoll(data.data, document.getElementById('poll-content'));
+    } catch { /* silent */ }
+  }
+
   // ===== LEADERBOARD =====
   async function loadLeaderboard() {
     const el = document.getElementById('leaderboard-content');
@@ -908,32 +1078,23 @@
     try {
       const res  = await fetch(`${API}/leaderboard`);
       const data = await res.json();
-      if (!data.success || !data.data.length) {
-        el.innerHTML = '<p class="no-match">No players yet.</p>';
-        return;
-      }
+      if (!data.success || !data.data.length) { el.innerHTML = '<p class="no-match">No players yet.</p>'; return; }
       const medals = ['🥇','🥈','🥉'];
-      const rows = data.data.map((u, i) => {
-        const cls  = i < 3 ? `top-${i+1}` : '';
-        const med  = medals[i] || '';
-        return `
-          <div class="lb-row ${cls}">
-            <div class="lb-rank">${i+1}</div>
-            ${med ? `<div class="lb-medal">${med}</div>` : '<div style="width:22px"></div>'}
-            <div>
-              <div class="lb-name">${escHtml(u.name)}</div>
-              <div class="lb-team">${escHtml(u.favoriteTeam || '')}</div>
-            </div>
-            <div style="margin-left:auto;text-align:right;">
-              <div class="lb-points">${u.points ?? 0}</div>
-              <div class="lb-pts-label">pts</div>
-            </div>
-          </div>`;
-      }).join('');
+      const rows = data.data.map((u, i) => `
+        <div class="lb-row ${i < 3 ? 'top-'+(i+1) : ''}">
+          <div class="lb-rank">${i+1}</div>
+          ${medals[i] ? `<div class="lb-medal">${medals[i]}</div>` : '<div style="width:22px"></div>'}
+          <div>
+            <div class="lb-name">${escHtml(u.name)}</div>
+            <div class="lb-team">${escHtml(u.favoriteTeam || '')}</div>
+          </div>
+          <div style="margin-left:auto;text-align:right;">
+            <div class="lb-points">${u.points ?? 0}</div>
+            <div class="lb-pts-label">pts</div>
+          </div>
+        </div>`).join('');
       el.innerHTML = `<div class="leaderboard-table">${rows}</div>`;
-    } catch {
-      el.innerHTML = '<p class="no-match">Could not load leaderboard. Check if your backend is running.</p>';
-    }
+    } catch { el.innerHTML = '<p class="no-match">Could not load leaderboard.</p>'; }
   }
 
   // ===== PLAYERS =====
@@ -943,24 +1104,189 @@
     try {
       const res  = await fetch(`${API}/leaderboard`);
       const data = await res.json();
-      if (!data.success || !data.data.length) {
-        el.innerHTML = '<p class="no-match">No players registered yet.</p>';
-        return;
-      }
-      const cards = data.data.map(u => {
-        const heart = getTeamHeart(u.favoriteTeam);
-        return `
-          <div class="player-card">
-            <div class="player-name">👤 ${escHtml(u.name)}</div>
-            <div class="player-team">${heart} ${escHtml(u.favoriteTeam || 'No team')}</div>
-            <div class="player-pts">${u.points ?? 0}</div>
-            <div class="player-pts-label">points</div>
-          </div>`;
-      }).join('');
+      if (!data.success || !data.data.length) { el.innerHTML = '<p class="no-match">No players registered yet.</p>'; return; }
+      const cards = data.data.map(u => `
+        <div class="player-card">
+          <div class="player-name">👤 ${escHtml(u.name)}</div>
+          <div class="player-team">${getTeamHeart(u.favoriteTeam)} ${escHtml(u.favoriteTeam || 'No team')}</div>
+          <div class="player-pts">${u.points ?? 0}</div>
+          <div class="player-pts-label">points</div>
+        </div>`).join('');
       el.innerHTML = `<div class="players-grid">${cards}</div>`;
-    } catch {
-      el.innerHTML = '<p class="no-match">Could not load players. Check if your backend is running.</p>';
+    } catch { el.innerHTML = '<p class="no-match">Could not load players.</p>'; }
+  }
+
+  // ===== CONTROL PANEL =====
+  function renderControlPanel() {
+    const el = document.getElementById('control-content');
+
+    if (!currentUser || !currentUser.isAdmin) {
+      el.innerHTML = `
+        <div class="cp-locked">
+          <div class="cp-locked-icon">🔒</div>
+          <div class="cp-locked-title">Admins Only</div>
+          <div class="cp-locked-msg">You need admin access to use the Control Panel.<br>Contact the league organiser.</div>
+        </div>`;
+      return;
     }
+
+    // Build team options for dropdowns
+    const teamOptions = IPL_TEAMS.map(t =>
+      `<option value="${escHtml(t.value)}">${escHtml(t.label)}</option>`
+    ).join('');
+
+    el.innerHTML = `
+      <div class="cp-wrap">
+
+        <!-- SET TODAY'S MATCH + AUTO-POLL -->
+        <div class="cp-section">
+          <div class="cp-section-title">🏏 Set Today's Match</div>
+          <div class="cp-row">
+            <div class="cp-field">
+              <label>Team A</label>
+              <select id="cpTeamA">
+                <option value="" disabled selected>Select Team A</option>
+                ${teamOptions}
+              </select>
+            </div>
+            <div class="cp-field">
+              <label>Team B</label>
+              <select id="cpTeamB">
+                <option value="" disabled selected>Select Team B</option>
+                ${teamOptions}
+              </select>
+            </div>
+          </div>
+          <div class="cp-field">
+            <label>Match Date</label>
+            <input type="date" id="cpMatchDate" />
+          </div>
+          <div class="cp-field">
+            <label>Poll Duration</label>
+            <select id="cpPollDuration">
+              <option value="" disabled selected>How long should the poll run?</option>
+              <option value="1">⏱ 1 hour</option>
+              <option value="2">⏱ 2 hours</option>
+              <option value="3">⏱ 3 hours</option>
+              <option value="4">⏱ 4 hours</option>
+              <option value="5">⏱ 5 hours</option>
+              <option value="6">⏱ 6 hours</option>
+              <option value="8">⏱ 8 hours</option>
+              <option value="12">⏱ 12 hours</option>
+              <option value="24">⏱ 24 hours</option>
+            </select>
+          </div>
+          <button class="cp-btn" onclick="doSetMatch()">Set Match &amp; Create Poll</button>
+          <div class="cp-msg" id="matchMsg"></div>
+        </div>
+
+        <!-- ADD / REMOVE POINTS -->
+        <div class="cp-section">
+          <div class="cp-section-title">🏅 Update Player Points</div>
+          <div class="cp-field">
+            <label>Select Player</label>
+            <select id="cpTargetUser">
+              <option value="" disabled selected>Loading players...</option>
+            </select>
+          </div>
+          <div class="cp-field">
+            <label>Points to Add / Remove</label>
+            <input type="number" id="cpPoints" placeholder="e.g. 10 or -5" min="-15" max="15" />
+          </div>
+          <button class="cp-btn" onclick="doUpdatePoints()">Update Points</button>
+          <div class="cp-msg" id="pointsMsg"></div>
+        </div>
+
+      </div>`;
+
+    // Pre-fill today's date
+    const today = new Date().toISOString().slice(0, 10);
+    document.getElementById('cpMatchDate').value = today;
+
+    // Load player list for dropdown
+    loadPlayersForCP();
+  }
+
+  async function loadPlayersForCP() {
+    try {
+      const res  = await fetch(`${API}/leaderboard`);
+      const data = await res.json();
+      if (!data.success) return;
+      const sel = document.getElementById('cpTargetUser');
+      if (!sel) return;
+      sel.innerHTML = '<option value="" disabled selected>Select a player</option>' +
+        data.data.map(u => `<option value="${escHtml(u._id)}">${escHtml(u.name)} (${u.points ?? 0} pts)</option>`).join('');
+    } catch { /* silent */ }
+  }
+
+  async function doSetMatch() {
+    const teamA    = document.getElementById('cpTeamA').value;
+    const teamB    = document.getElementById('cpTeamB').value;
+    const date     = document.getElementById('cpMatchDate').value;
+    const duration = document.getElementById('cpPollDuration').value;
+    const msgEl    = document.getElementById('matchMsg');
+
+    if (!teamA || !teamB || !date || !duration) return setCpMsg(msgEl, 'Fill in all fields.', 'error');
+    if (teamA === teamB) return setCpMsg(msgEl, 'Team A and Team B must be different.', 'error');
+
+    setCpMsg(msgEl, 'Setting match...', '');
+    try {
+      // 1. Set match
+      const mRes  = await fetch(`${API}/set-match`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+        body: JSON.stringify({ teamA, teamB, date })
+      });
+      const mData = await mRes.json();
+      if (!mData.success) return setCpMsg(msgEl, mData.message, 'error');
+
+      // 2. Auto-create poll for the two teams
+      const pRes  = await fetch(`${API}/create-poll`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+        body: JSON.stringify({
+          question: `Who will win today? ${teamA} vs ${teamB}`,
+          options:  [teamA, teamB],
+          durationHours: parseInt(duration)
+        })
+      });
+      const pData = await pRes.json();
+      if (!pData.success) return setCpMsg(msgEl, 'Match set, but poll failed: ' + pData.message, 'error');
+
+      setCpMsg(msgEl, `✅ Match set & poll created for ${parseInt(duration)}h!`, 'success');
+    } catch {
+      setCpMsg(msgEl, 'Server error. Is the backend running?', 'error');
+    }
+  }
+
+  async function doUpdatePoints() {
+    const targetUserId = document.getElementById('cpTargetUser').value;
+    const points       = parseInt(document.getElementById('cpPoints').value);
+    const msgEl        = document.getElementById('pointsMsg');
+
+    if (!targetUserId) return setCpMsg(msgEl, 'Select a player.', 'error');
+    if (isNaN(points) || points === 0) return setCpMsg(msgEl, 'Enter a non-zero points value.', 'error');
+    if (points > 15 || points < -15)   return setCpMsg(msgEl, 'Points must be between -15 and 15.', 'error');
+
+    setCpMsg(msgEl, 'Updating...', '');
+    try {
+      const res  = await fetch(`${API}/update-points`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+        body: JSON.stringify({ targetUserId, points })
+      });
+      const data = await res.json();
+      if (!data.success) return setCpMsg(msgEl, data.message, 'error');
+      setCpMsg(msgEl, `✅ ${data.data.name} now has ${data.data.points} pts.`, 'success');
+      loadPlayersForCP(); // refresh dropdown with new points
+    } catch {
+      setCpMsg(msgEl, 'Server error.', 'error');
+    }
+  }
+
+  function setCpMsg(el, msg, type) {
+    el.textContent = msg;
+    el.className   = 'cp-msg ' + (type || '');
   }
 
   // ===== UTILS =====
