@@ -7,7 +7,7 @@ import dns from 'dns';
 import Match from './models/Match.js';
 import User from './models/User.js';
 import Poll from './models/Polls.js';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
