@@ -141,12 +141,10 @@
   .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
   .logo-ring img {
-  width: 70%;
-  height: 70%;
-  object-fit: contain;
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
   }
-
-  
 
   /* ===== MAIN ===== */
   .main {
@@ -168,37 +166,26 @@
     top: 32px;
   }
   .logo-ring {
-  width: 60px;        /* keep your original size */
-  height: 60px;
-  border-radius: 50%;
-  overflow: hidden;   /* ensures image stays inside circle */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  overflow: hidden;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+      0 0 10px rgba(255, 140, 0, 0.6),
+      0 0 20px rgba(255, 140, 0, 0.4),
+      0 0 30px rgba(255, 140, 0, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+  }
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  /* 🔥 glowing ring */
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 
-    0 0 10px rgba(255, 140, 0, 0.6),
-    0 0 20px rgba(255, 140, 0, 0.4),
-    0 0 30px rgba(255, 140, 0, 0.2);
-
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.logo-ring img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;  /* makes it fill like an icon */
-}
+  .logo-ring img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
   
   .brand-name {
     font-family: 'Bebas Neue', cursive;
@@ -316,7 +303,6 @@
   .menu-item:hover .menu-icon { background: rgba(247,168,0,0.14); }
   .menu-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 4px 28px; }
 
-  /* Admin badge in menu */
   .menu-admin-section {
     margin: 8px 0;
     border-top: 1px solid rgba(247,168,0,0.15);
@@ -328,13 +314,6 @@
   }
   .menu-item-admin { border-left-color: transparent; }
   .menu-item-admin:hover { border-left-color: #F7A800; }
-  .admin-locked {
-    padding: 14px 28px;
-    font-size: 13px;
-    color: rgba(255,255,255,0.3);
-    display: flex; align-items: center; gap: 10px;
-  }
-  .admin-locked-icon { font-size: 18px; opacity: 0.5; }
 
   /* ===== PAGES ===== */
   .page {
@@ -364,7 +343,7 @@
   }
   .page-msg { font-size: 14px; color: rgba(255,255,255,0.42); max-width: 260px; line-height: 1.65; text-align: center; }
 
-  /* ===== AUTH FORM (shared between login screen and login page) ===== */
+  /* ===== AUTH FORM ===== */
   .auth-box {
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,255,255,0.1);
@@ -448,15 +427,8 @@
     width: 100%; max-width: 480px;
     margin-top: 20px;
   }
-  .poll-question {
-    font-size: 16px; font-weight: 600;
-    color: #fff; margin-bottom: 16px;
-  }
-  .poll-timer {
-    font-size: 11px; color: var(--ipl-gold);
-    letter-spacing: 1px; text-transform: uppercase;
-    margin-bottom: 16px; opacity: 0.8;
-  }
+  .poll-question { font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 16px; }
+  .poll-timer { font-size: 11px; color: var(--ipl-gold); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; opacity: 0.8; }
   .poll-option {
     position: relative;
     background: rgba(255,255,255,0.05);
@@ -571,22 +543,6 @@
   .cp-msg { margin-top: 12px; font-size: 13px; text-align: center; min-height: 18px; }
   .cp-msg.error { color: #ff6b6b; }
   .cp-msg.success { color: #4ade80; }
-
-  /* User dropdown in add-points */
-  .user-select-row { display: flex; align-items: center; gap: 10px; }
-  .pts-signed { display: flex; gap: 8px; }
-  .pts-btn {
-    flex: 1; padding: 10px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 8px; color: #fff; font-size: 14px; font-weight: 600;
-    cursor: pointer; transition: all 0.18s; text-align: center;
-  }
-  .pts-btn:hover { border-color: rgba(247,168,0,0.4); background: rgba(247,168,0,0.08); }
-  .pts-btn.selected-pos { background: rgba(74,222,128,0.15); border-color: #4ade80; color: #4ade80; }
-  .pts-btn.selected-neg { background: rgba(255,107,107,0.15); border-color: #ff6b6b; color: #ff6b6b; }
-
-  /* Non-admin locked panel */
   .cp-locked {
     background: rgba(255,255,255,0.03);
     border: 1px solid rgba(255,255,255,0.07);
@@ -608,10 +564,134 @@
   @keyframes spin { to { transform: rotate(360deg); } }
 
   /* ===== RULES PAGE ===== */
-  .rules-list { width: 100%; max-width: 480px; text-align: left; }
-  .rule-item { display: flex; gap: 14px; padding: 16px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; margin-bottom: 10px; align-items: flex-start; }
-  .rule-num { font-family: 'Bebas Neue', cursive; font-size: 20px; color: var(--ipl-gold); flex-shrink: 0; width: 24px; }
-  .rule-text { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.6; }
+  .rules-wrap {
+    width: 100%;
+    max-width: 560px;
+    text-align: left;
+  }
+
+  /* Section heading */
+  .rules-section-heading {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: var(--ipl-gold);
+    opacity: 0.75;
+    text-transform: uppercase;
+    margin: 28px 0 14px;
+    padding-left: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .rules-section-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(247,168,0,0.2);
+  }
+  .rules-section-heading:first-child { margin-top: 0; }
+
+  /* Core rule item */
+  .rule-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    align-items: flex-start;
+  }
+  .rule-num {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 18px;
+    color: var(--ipl-gold);
+    flex-shrink: 0;
+    width: 22px;
+    line-height: 1.4;
+  }
+  .rule-text {
+    font-size: 14px;
+    color: rgba(255,255,255,0.68);
+    line-height: 1.65;
+  }
+  .rule-text strong {
+    color: #fff;
+    font-weight: 700;
+  }
+
+  /* Achievement item */
+  .achievement-item {
+    display: flex;
+    gap: 14px;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    align-items: flex-start;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .achievement-item:hover {
+    background: rgba(247,168,0,0.05);
+    border-color: rgba(247,168,0,0.18);
+  }
+  .ach-icon {
+    font-size: 22px;
+    flex-shrink: 0;
+    width: 28px;
+    text-align: center;
+    line-height: 1.3;
+  }
+  .ach-body { flex: 1; }
+  .ach-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 3px;
+    line-height: 1.4;
+  }
+  .ach-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.55;
+  }
+  .ach-reward {
+    flex-shrink: 0;
+    font-family: 'Bebas Neue', cursive;
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: var(--ipl-gold);
+    line-height: 1;
+    text-align: right;
+    padding-top: 2px;
+    min-width: 52px;
+  }
+  .ach-reward span {
+    display: block;
+    font-family: 'Barlow', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    color: rgba(247,168,0,0.5);
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  /* Rules footer note */
+  .rules-note {
+    margin-top: 24px;
+    padding: 14px 18px;
+    background: rgba(240,90,40,0.07);
+    border: 1px solid rgba(240,90,40,0.2);
+    border-radius: 12px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.42);
+    line-height: 1.7;
+    text-align: center;
+    font-style: italic;
+  }
 
   /* ===== RESPONSIVE ===== */
   @media (max-width: 700px) {
@@ -629,6 +709,7 @@
     .players-grid { grid-template-columns: 1fr 1fr; }
     .match-team { font-size: 32px; }
     .cp-row { grid-template-columns: 1fr; }
+    .ach-reward { min-width: 44px; font-size: 18px; }
   }
   @media (max-width: 400px) {
     .cards-grid { grid-template-columns: 1fr; }
@@ -650,7 +731,6 @@
       <button class="auth-tab" id="lsTabSignup" onclick="lsSwitchTab('signup')">Sign Up</button>
     </div>
 
-    <!-- Login form -->
     <div id="lsLoginForm">
       <div class="auth-field">
         <label>Username</label>
@@ -664,7 +744,6 @@
       <button class="auth-btn" onclick="doLsLogin()">Login</button>
     </div>
 
-    <!-- Signup form -->
     <div id="lsSignupForm" style="display:none;">
       <div class="auth-field">
         <label>Username</label>
@@ -697,12 +776,11 @@
   </div>
 </div>
 
-<!-- ===== MAIN APP (hidden until logged in) ===== -->
+<!-- ===== MAIN APP ===== -->
 <div id="appWrapper" style="display:none;">
 
 <div class="overlay" id="overlay" onclick="closeMenu()"></div>
 
-<!-- SLIDE MENU -->
 <nav class="slide-menu" id="slideMenu">
   <button class="menu-close" onclick="closeMenu()">✕</button>
   <div class="menu-label">Navigate</div>
@@ -713,8 +791,6 @@
   <div class="menu-item" id="menuAuthItem" onclick="openPage('login')">
     <div class="menu-icon">🔐</div><span id="menuAuthLabel">Account</span>
   </div>
-
-  <!-- CONTROL PANEL section in menu -->
   <div class="menu-admin-section">
     <div class="menu-admin-label">Admin</div>
     <div class="menu-item menu-item-admin" onclick="openPage('control')">
@@ -724,7 +800,6 @@
 </nav>
 
 <div class="shell">
-  <!-- NAVBAR -->
   <header class="navbar">
     <div class="nav-logo">
       <div style="width:40px;height:40px;border-radius:50%;border:1.5px solid rgba(247,168,0,0.4);background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:20px;animation:pulse-glow 3s ease-in-out infinite;">🏏</div>
@@ -753,7 +828,7 @@
     </aside>
 
     <section class="cards-section">
-      <div class="section-label">Match dekho, tension lo... jeetma hai toh calculations karo !</div>
+      <div class="section-label">Match dekho, tension lo... jeetna hai toh calculations karo !</div>
       <div class="cards-grid">
         <div class="card card-match" onclick="openPage('match')">
           <div class="live-badge"><span class="live-dot"></span> Live</div>
@@ -819,12 +894,161 @@
   <div class="page-back" onclick="closePage()">←</div>
   <div class="page-icon">📋</div>
   <div class="page-title">Rules</div>
-  <div class="rules-list">
-    <div class="rule-item"><div class="rule-num">1</div><div class="rule-text">Predict the winner of each match before it starts to earn points.</div></div>
-    <div class="rule-item"><div class="rule-num">2</div><div class="rule-text">Correct prediction earns you points as decided by the admin.</div></div>
-    <div class="rule-item"><div class="rule-num">3</div><div class="rule-text">Wrong prediction may cost you points. Play wisely!</div></div>
-    <div class="rule-item"><div class="rule-num">4</div><div class="rule-text">The player with the most points at the end of the season wins.</div></div>
-    <div class="rule-item"><div class="rule-num">5</div><div class="rule-text">Points are updated by the admin after each match result.</div></div>
+
+  <div class="rules-wrap">
+
+    <!-- CORE RULES -->
+    <div class="rules-section-heading">Core Rules</div>
+
+    <div class="rule-item">
+      <div class="rule-num">1</div>
+      <div class="rule-text">Every player selects <strong>one favourite team</strong> at the start of the season. This cannot be changed once locked in.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-num">2</div>
+      <div class="rule-text">On any match day involving your favourite team, you <strong>must vote for your favourite team</strong> — no exceptions.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-num">3</div>
+      <div class="rule-text">On match days that do <strong>not</strong> involve your favourite team, you are free to vote for either team playing.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-num">4</div>
+      <div class="rule-text">A correct prediction earns you <strong>+1 point</strong>.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-num">5</div>
+      <div class="rule-text">A daily poll will be shared before each match. <strong>Failure to vote before the deadline = 0 points</strong> for that match. No exceptions.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-num">6</div>
+      <div class="rule-text"><strong>Payment first.</strong> No exceptions. 🙏</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-num">7</div>
+      <div class="rule-text">In the event of a <strong>tie on total points</strong> at season's end, the prize is split equally among all tied players.</div>
+    </div>
+    <div class="rule-item">
+      <div class="rule-num">8</div>
+      <div class="rule-text">Rules may be updated if loopholes are discovered. <strong>Stay sharp.</strong></div>
+    </div>
+
+    <!-- ACHIEVEMENTS -->
+    <div class="rules-section-heading">Achievements</div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">🔥</div>
+      <div class="ach-body">
+        <div class="ach-title">Personal Winning Streak — 5 / 7 / 10</div>
+        <div class="ach-desc">Earn bonus points when you correctly predict 5, 7, or 10 matches in a row. Repeatable — can be earned multiple times by anyone.</div>
+      </div>
+      <div class="ach-reward">+1/2/3<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">💀</div>
+      <div class="ach-body">
+        <div class="ach-title">Personal Losing Streak — 5 in a Row</div>
+        <div class="ach-desc">Getting a pity point for suffering through 5 straight wrong predictions. Repeatable — can be earned multiple times by anyone.</div>
+      </div>
+      <div class="ach-reward">+1<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">⭐</div>
+      <div class="ach-body">
+        <div class="ach-title">Favourite Team Winning Streak — 5 / 7 / 10</div>
+        <div class="ach-desc">Bonus points when your favourite team wins 5, 7, or 10 consecutive matches. One-time only per player per tier.</div>
+      </div>
+      <div class="ach-reward">+1/2/3<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">🟣</div>
+      <div class="ach-body">
+        <div class="ach-title">Purple Cap — Favourite Team</div>
+        <div class="ach-desc">The leading wicket-taker (Purple Cap holder) belongs to your favourite team before the semi-finals. One-time only; shared across players with the same favourite team.</div>
+      </div>
+      <div class="ach-reward">+1<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">🟠</div>
+      <div class="ach-body">
+        <div class="ach-title">Orange Cap — Favourite Team</div>
+        <div class="ach-desc">The leading run-scorer (Orange Cap holder) belongs to your favourite team before the semi-finals. One-time only; shared across players with the same favourite team.</div>
+      </div>
+      <div class="ach-reward">+1<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">🏟️</div>
+      <div class="ach-body">
+        <div class="ach-title">Favourite Team Qualifies for Semi-Finals</div>
+        <div class="ach-desc">Your favourite team makes it to the knockout stage.</div>
+      </div>
+      <div class="ach-reward">+1<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">🥈</div>
+      <div class="ach-body">
+        <div class="ach-title">Favourite Team Qualifies for the Final</div>
+        <div class="ach-desc">Your favourite team advances to the IPL Final.</div>
+      </div>
+      <div class="ach-reward">+2<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">🏆</div>
+      <div class="ach-body">
+        <div class="ach-title">Favourite Team Wins the Final</div>
+        <div class="ach-desc">Your favourite team lifts the IPL trophy. The ultimate achievement.</div>
+      </div>
+      <div class="ach-reward">+3<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">💔</div>
+      <div class="ach-body">
+        <div class="ach-title">First Team Eliminated</div>
+        <div class="ach-desc">Your favourite team is the first side knocked out of the tournament. Condolences — here's a consolation prize.</div>
+      </div>
+      <div class="ach-reward">+2<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">📈</div>
+      <div class="ach-body">
+        <div class="ach-title">Longest Personal Streak of the Season</div>
+        <div class="ach-desc">The player(s) with the longest prediction streak over the entire season. Shared equally if multiple players tie.</div>
+      </div>
+      <div class="ach-reward">TBD<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">🌟</div>
+      <div class="ach-body">
+        <div class="ach-title">MVP from Favourite Team</div>
+        <div class="ach-desc">The officially declared MVP of the tournament belongs to your favourite team.</div>
+      </div>
+      <div class="ach-reward">+1<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">⚡</div>
+      <div class="ach-body">
+        <div class="ach-title">First & Last to 15 Points</div>
+        <div class="ach-desc">The first player to reach 15 points earns a bonus. So does the last player to reach 15 points. Two opportunities, two different players.</div>
+      </div>
+      <div class="ach-reward">+1<span>pts</span></div>
+    </div>
+
+    <!-- FOOTER NOTE -->
+    <div class="rules-note">
+      ⚠️ Rules are subject to patches if loopholes are discovered. Play fair, vote on time, and may your favourites never disappoint — but if they do, at least you get points for it.
+    </div>
+
   </div>
 </div>
 
@@ -882,16 +1106,11 @@
     return '❤️';
   }
 
-  // ===== STATE =====
   let currentUser = JSON.parse(localStorage.getItem('sattebazi_user') || 'null');
   let authToken   = localStorage.getItem('sattebazi_token') || null;
 
-  // ===== BOOT: check if already logged in =====
   window.addEventListener('DOMContentLoaded', () => {
-    if (currentUser && authToken) {
-      showApp();
-    }
-    // else login screen stays visible
+    if (currentUser && authToken) showApp();
   });
 
   function showApp() {
@@ -900,7 +1119,6 @@
     updateAuthUI();
   }
 
-  // ===== FORCE LOGIN SCREEN TABS =====
   function lsSwitchTab(tab) {
     document.getElementById('lsLoginForm').style.display  = tab === 'login'  ? 'block' : 'none';
     document.getElementById('lsSignupForm').style.display = tab === 'signup' ? 'block' : 'none';
@@ -958,7 +1176,6 @@
     }
   }
 
-  // ===== MENU =====
   function toggleMenu() {
     const open = document.getElementById('slideMenu').classList.toggle('open');
     document.getElementById('overlay').classList.toggle('open', open);
@@ -970,7 +1187,6 @@
     document.getElementById('hamburger').classList.remove('open');
   }
 
-  // ===== PAGES =====
   function openPage(name) {
     closeMenu();
     document.getElementById('page-' + name)?.classList.add('active');
@@ -985,7 +1201,6 @@
   }
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeMenu(); closePage(); } });
 
-  // ===== AUTH UI =====
   function updateAuthUI() {
     const pill = document.getElementById('navUserPill');
     if (currentUser) {
@@ -1012,14 +1227,12 @@
     closePage();
     document.getElementById('appWrapper').style.display  = 'none';
     document.getElementById('loginScreen').style.display = 'flex';
-    // reset login screen fields
     document.getElementById('lsLoginName').value = '';
     document.getElementById('lsLoginPass').value = '';
     document.getElementById('lsMsg').textContent = '';
     lsSwitchTab('login');
   }
 
-  // ===== TODAY'S MATCH =====
   async function loadMatch() {
     const el = document.getElementById('match-content');
     el.innerHTML = '<div class="spinner"></div>';
@@ -1047,14 +1260,13 @@
     }
   }
 
-  // ===== POLL =====
   async function loadPoll() {
     const el = document.getElementById('poll-content');
     el.innerHTML = '';
     try {
       const res  = await fetch(`${API}/poll`);
       const data = await res.json();
-      if (!data.success) return; // no poll or expired → silent
+      if (!data.success) return;
       renderPoll(data.data, el);
     } catch { /* silent */ }
   }
@@ -1067,11 +1279,10 @@
     const timeStr  = minsLeft > 60 ? `${Math.round(minsLeft/60)}h left` : `${minsLeft}m left`;
 
     const optionsHtml = poll.options.map((opt, i) => {
-      const pct   = totalVotes > 0 ? Math.round((opt.votes / totalVotes) * 100) : 0;
-      const isMe  = myVote && poll.voters.findIndex(v => v.userId === currentUser._id) !== -1 && myVote;
+      const pct     = totalVotes > 0 ? Math.round((opt.votes / totalVotes) * 100) : 0;
       const showPct = !!myVote;
       return `
-        <div class="poll-option ${myVote ? '' : ''}" onclick="doVote(${i})" id="popt-${i}">
+        <div class="poll-option" onclick="doVote(${i})" id="popt-${i}">
           <div class="poll-option-bar" style="width:${showPct ? pct : 0}%"></div>
           <div class="poll-option-label">
             <span>${escHtml(opt.text)}</span>
@@ -1082,9 +1293,7 @@
 
     el.innerHTML = `
       <div class="poll-card">
-        <div class="poll-question" style="white-space: pre-line;">
-          🗳️ ${escHtml(poll.question)}
-        </div>
+        <div class="poll-question" style="white-space: pre-line;">🗳️ ${escHtml(poll.question)}</div>
         <div class="poll-timer">⏱ ${timeStr} · ${totalVotes} vote${totalVotes !== 1 ? 's' : ''}</div>
         ${optionsHtml}
         ${myVote ? '<div class="poll-voted-msg">✅ You have voted.</div>' : ''}
@@ -1101,12 +1310,10 @@
       });
       const data = await res.json();
       if (!data.success) return;
-      // re-render poll with updated data
       renderPoll(data.data, document.getElementById('poll-content'));
     } catch { /* silent */ }
   }
 
-  // ===== LEADERBOARD =====
   async function loadLeaderboard() {
     const el = document.getElementById('leaderboard-content');
     el.innerHTML = '<div class="spinner"></div>';
@@ -1132,7 +1339,6 @@
     } catch { el.innerHTML = '<p class="no-match">Could not load leaderboard.</p>'; }
   }
 
-  // ===== PLAYERS =====
   async function loadPlayers() {
     const el = document.getElementById('players-content');
     el.innerHTML = '<div class="spinner"></div>';
@@ -1151,7 +1357,6 @@
     } catch { el.innerHTML = '<p class="no-match">Could not load players.</p>'; }
   }
 
-  // ===== CONTROL PANEL =====
   function renderControlPanel() {
     const el = document.getElementById('control-content');
 
@@ -1165,15 +1370,12 @@
       return;
     }
 
-    // Build team options for dropdowns
     const teamOptions = IPL_TEAMS.map(t =>
       `<option value="${escHtml(t.value)}">${escHtml(t.label)}</option>`
     ).join('');
 
     el.innerHTML = `
       <div class="cp-wrap">
-
-        <!-- SET TODAY'S MATCH + AUTO-POLL -->
         <div class="cp-section">
           <div class="cp-section-title">🏏 Set Today's Match</div>
           <div class="cp-row">
@@ -1215,7 +1417,6 @@
           <div class="cp-msg" id="matchMsg"></div>
         </div>
 
-        <!-- ADD / REMOVE POINTS -->
         <div class="cp-section">
           <div class="cp-section-title">🏅 Update Player Points</div>
           <div class="cp-field">
@@ -1231,14 +1432,10 @@
           <button class="cp-btn" onclick="doUpdatePoints()">Update Points</button>
           <div class="cp-msg" id="pointsMsg"></div>
         </div>
-
       </div>`;
 
-    // Pre-fill today's date
     const today = new Date().toISOString().slice(0, 10);
     document.getElementById('cpMatchDate').value = today;
-
-    // Load player list for dropdown
     loadPlayersForCP();
   }
 
@@ -1266,7 +1463,6 @@
 
     setCpMsg(msgEl, 'Setting match...', '');
     try {
-      // 1. Set match
       const mRes  = await fetch(`${API}/set-match`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
@@ -1275,7 +1471,6 @@
       const mData = await mRes.json();
       if (!mData.success) return setCpMsg(msgEl, mData.message, 'error');
 
-      // 2. Auto-create poll for the two teams
       const pRes  = await fetch(`${API}/create-poll`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
@@ -1313,7 +1508,7 @@
       const data = await res.json();
       if (!data.success) return setCpMsg(msgEl, data.message, 'error');
       setCpMsg(msgEl, `✅ ${data.data.name} now has ${data.data.points} pts.`, 'success');
-      loadPlayersForCP(); // refresh dropdown with new points
+      loadPlayersForCP();
     } catch {
       setCpMsg(msgEl, 'Server error.', 'error');
     }
@@ -1324,7 +1519,6 @@
     el.className   = 'cp-msg ' + (type || '');
   }
 
-  // ===== UTILS =====
   function escHtml(s) {
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
