@@ -513,6 +513,12 @@ app.post('/predict', authMiddleware, async (req, res) => {
         message: "You must pick your favorite team"
       });
     }
+    if (user.prediction && String(user.prediction.matchId) === String(match._id)) {
+      return res.status(400).json({
+      success: false,
+      message: "Already predicted"
+      });
+    }
 
     user.prediction = {
       team,
