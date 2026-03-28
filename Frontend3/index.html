@@ -140,6 +140,14 @@
   .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
   .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
 
+  .logo-ring img {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+  }
+
+  
+
   /* ===== MAIN ===== */
   .main {
     padding: 40px 32px 60px;
@@ -160,15 +168,38 @@
     top: 32px;
   }
   .logo-ring {
-    width: 110px; height: 110px;
-    border-radius: 50%;
-    border: 2px solid rgba(247,168,0,0.35);
-    background: rgba(255,255,255,0.06);
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 24px;
-    animation: pulse-glow 3s ease-in-out infinite;
-    font-size: 48px;
-  }
+  width: 60px;        /* keep your original size */
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;   /* ensures image stays inside circle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 🔥 glowing ring */
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 0 10px rgba(255, 140, 0, 0.6),
+    0 0 20px rgba(255, 140, 0, 0.4),
+    0 0 30px rgba(255, 140, 0, 0.2);
+
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.logo-ring img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  /* makes it fill like an icon */
+}
+  
   .brand-name {
     font-family: 'Bebas Neue', cursive;
     font-size: 64px; letter-spacing: 4px; line-height: 1;
@@ -712,15 +743,17 @@
 
   <main class="main">
     <aside class="hero">
-      <div class="logo-ring">🏏</div>
+      <div class="logo-ring">
+        <img src="./hero.png" alt="icon" />
+      </div>
       <div class="brand-name">Sattebazi</div>
       <div class="brand-tagline">IPL Fantasy Prediction League</div>
-      <p class="hero-desc">Pick your winners, predict match outcomes, and climb the leaderboard with your cricket instincts.</p>
-      <div class="season-pill"><span class="season-dot"></span> IPL 2025 Season</div>
+      <p class="hero-desc">Pick your winners, predict match outcomes, and climb the leaderboard with your cricket instincts or maybe just TUKKA.</p>
+      <div class="season-pill"><span class="season-dot"></span> IPL 2026 Season</div>
     </aside>
 
     <section class="cards-section">
-      <div class="section-label">Quick Access</div>
+      <div class="section-label">Match dekho, tension lo... jeetma hai toh calculations karo !</div>
       <div class="cards-grid">
         <div class="card card-match" onclick="openPage('match')">
           <div class="live-badge"><span class="live-dot"></span> Live</div>
@@ -1049,7 +1082,9 @@
 
     el.innerHTML = `
       <div class="poll-card">
-        <div class="poll-question">🗳️ ${escHtml(poll.question)}</div>
+        <div class="poll-question" style="white-space: pre-line;">
+          🗳️ ${escHtml(poll.question)}
+        </div>
         <div class="poll-timer">⏱ ${timeStr} · ${totalVotes} vote${totalVotes !== 1 ? 's' : ''}</div>
         ${optionsHtml}
         ${myVote ? '<div class="poll-voted-msg">✅ You have voted.</div>' : ''}
@@ -1245,7 +1280,7 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
         body: JSON.stringify({
-          question: `Who will win today? ${teamA} vs ${teamB}`,
+          question: `Who will win today?\n${teamA} vs ${teamB}`,
           options:  [teamA, teamB],
           durationHours: parseInt(duration)
         })
