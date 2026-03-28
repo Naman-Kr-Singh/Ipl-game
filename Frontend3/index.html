@@ -1406,19 +1406,48 @@
       </div>`;
   }
 
-  async function doVote(optionIndex) {
-    if (!authToken) return;
-    try {
-      const res  = await fetch(`${API}/vote`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
-        body: JSON.stringify({ optionIndex })
-      });
-      const data = await res.json();
-      if (!data.success) return;
-      renderPoll(data.data, document.getElementById('poll-content'));
-    } catch { /* silent */ }
+async function doVote(optionIndex) {
+  if (!authToken) return;
+
+  try {
+    // 🔹 First get poll to know which team was selected
+    const pollRes = await fetch(`${API}/poll`);
+    const pollData = await pollRes.json();
+
+    if (!pollData.success) return;
+
+    const selectedOption = pollData.data.options[optionIndex].text;
+
+    // 🔹 1. Send vote
+    const res = await fetch(`${API}/vote`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+      body: JSON.stringify({ optionIndex })
+    });
+
+    const data = await res.json();
+    if (!data.success) return;
+
+    // 🔹 2. ALSO save prediction (🔥 IMPORTANT)
+    await fetch(`${API}/predict`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`
+      },
+      body: JSON.stringify({ team: selectedOption })
+    });
+
+    // 🔹 3. Update UI
+    renderPoll(data.data, document.getElementById('poll-content'));
+
+  } catch (err) {
+    console.error(err);
   }
+}
 
   async function loadLeaderboard() {
     const el = document.getElementById('leaderboard-content');
