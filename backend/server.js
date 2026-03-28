@@ -481,6 +481,54 @@ app.post('/vote', authMiddleware, async (req, res) => {
   }
 });
 
+// ================= USER: MAKE PREDICTION =================
+app.post('/predict', authMiddleware, async (req, res) => {
+  try {
+    const { team } = req.body;
+    const userId = req.user.userId;
+
+    const match = await Match.findOne();
+
+    if (!match) {
+      return res.status(400).json({
+        success: false,
+        message: "No active match"
+      });
+    }
+
+    // rule: must choose fav team if playing
+    const user = await User.findById(userId);
+
+    if (
+      (match.teamA === user.favoriteTeam || match.teamB === user.favoriteTeam) &&
+      team !== user.favoriteTeam
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "You must pick your favorite team"
+      });
+    }
+
+    user.prediction = {
+      team,
+      matchId: match._id
+    };
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Prediction saved"
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+});
+
 // ================= GET TODAY MATCH =================
 app.get('/today-match', async (req, res) => {
   try {
@@ -505,6 +553,72 @@ app.get('/today-match', async (req, res) => {
     });
   }
 });
+
+// ================= ADMIN: DECLARE RESULT =================
+app.post('/declare-result', authMiddleware, async (req, res) => {
+  try {
+    const { winner } = req.body;
+    const userId = req.user.userId;
+
+    const admin = await User.findById(userId);
+
+    if (!admin || !admin.isAdmin) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized"
+      });
+    }
+
+    const match = await Match.findOne();
+
+    if (!match) {
+      return res.status(400).json({
+        success: false,
+        message: "No active match"
+      });
+    }
+
+    // validate winner
+    if (winner !== match.teamA && winner !== match.teamB) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid winner"
+      });
+    }
+
+    const users = await User.find();
+
+    let winnersCount = 0;
+
+    for (let user of users) {
+      if (
+        user.prediction &&
+        user.prediction.team === winner &&
+        String(user.prediction.matchId) === String(match._id)
+      ) {
+        user.points += 1;
+        winnersCount++;
+        await user.save();
+      }
+
+      // clear prediction for next match
+      user.prediction = null;
+      await user.save();
+    }
+
+    res.json({
+      success: true,
+      message: `Result declared. ${winnersCount} users got +1 point`
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+  }
+});
+
 // ================= DB CONNECTION =================
 
 mongoose.connect(process.env.MONGO_URI)

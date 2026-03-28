@@ -19,7 +19,13 @@ const userSchema = new mongoose.Schema({
   isAdmin: {
     type: Boolean,
     default: false
+  },
+    // 🆕 ADD THIS HERE
+  prediction: {
+    team: String,
+    matchId: String
   }
+
 }, { timestamps: true });
 
 export default mongoose.model('User', userSchema);
