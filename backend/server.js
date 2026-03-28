@@ -312,7 +312,7 @@ app.post('/set-match', authMiddleware, async (req, res) => {
 // ================= ADMIN: CREATE POLL =================
 app.post('/create-poll', authMiddleware, async (req, res) => {
   try {
-    const { question, options, durationHours } = req.body;
+    const { question, options, durationHours, durationSeconds } = req.body;
     const userId = req.user.userId;
 
     const admin = await User.findById(userId);
@@ -325,7 +325,7 @@ app.post('/create-poll', authMiddleware, async (req, res) => {
     }
 
     // ✅ Validation
-    if (!question || !options || !durationHours) {
+    if (!question || !options || (!durationHours && !durationSeconds)) {
       return res.status(400).json({
         success: false,
         message: "Missing fields"
@@ -355,7 +355,12 @@ app.post('/create-poll', authMiddleware, async (req, res) => {
       });
     }
 
-    const expiresAt = new Date(Date.now() + durationHours * 60 * 60 * 1000);
+    // durationSeconds for testing (e.g. 30s), durationHours for production
+    const durationMs = durationSeconds
+      ? Number(durationSeconds) * 1000
+      : Number(durationHours) * 60 * 60 * 1000;
+
+    const expiresAt = new Date(Date.now() + durationMs);
 
     // 🧹 Only one active poll
     await Poll.deleteMany({});
@@ -443,8 +448,8 @@ app.post('/vote', authMiddleware, async (req, res) => {
       });
     }
 
-    // ⛔ already voted
-    const alreadyVoted = poll.voters.find(v => v.userId === userId);
+    // ⛔ already voted — use String() on both sides to avoid ObjectId vs string mismatch
+    const alreadyVoted = poll.voters.find(v => String(v.userId) === String(userId));
 
     if (alreadyVoted) {
       return res.status(400).json({
@@ -591,18 +596,25 @@ app.post('/declare-result', authMiddleware, async (req, res) => {
     let winnersCount = 0;
 
     for (let user of users) {
-      if (
-        user.prediction &&
-        user.prediction.team === winner &&
-        String(user.prediction.matchId) === String(match._id)
-      ) {
+      const hasPrediction = user.prediction && String(user.prediction.matchId) === String(match._id);
+      const predictedCorrectly = hasPrediction && user.prediction.team === winner;
+
+      if (predictedCorrectly) {
         user.points += 1;
         winnersCount++;
-        await user.save();
+        // Extend win streak (positive), or reset from losing streak
+        user.streak = (user.streak > 0) ? user.streak + 1 : 1;
+      } else if (hasPrediction) {
+        // Wrong prediction — extend lose streak (negative), or reset from win streak
+        user.streak = (user.streak < 0) ? user.streak - 1 : -1;
       }
 
-      // clear prediction for next match
+      // Clear prediction for next match — set BEFORE the single save below
       user.prediction = null;
+
+      // ✅ KEY FIX: ONE save only. The original code had two saves —
+      // the second one (prediction=null) was overwriting the points update,
+      // which is why winners always got 0 points.
       await user.save();
     }
 

@@ -1547,6 +1547,8 @@
             <label>Poll Duration</label>
             <select id="cpPollDuration">
               <option value="" disabled selected>How long should the poll run?</option>
+              <option value="0.00833">🧪 30 seconds (testing)</option>
+              <option value="0.0167">🧪 1 minute (testing)</option>
               <option value="1">⏱ 1 hour</option>
               <option value="2">⏱ 2 hours</option>
               <option value="3">⏱ 3 hours</option>
@@ -1662,19 +1664,21 @@
       const mData = await mRes.json();
       if (!mData.success) return setCpMsg(msgEl, mData.message, 'error');
 
+      const durationFloat = parseFloat(duration);
+      const pollBody = durationFloat < 1
+        ? { question: `Who will win today?\n${teamA} vs ${teamB}`, options: [teamA, teamB], durationSeconds: Math.round(durationFloat * 3600) }
+        : { question: `Who will win today?\n${teamA} vs ${teamB}`, options: [teamA, teamB], durationHours: durationFloat };
+
       const pRes  = await fetch(`${API}/create-poll`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
-        body: JSON.stringify({
-          question: `Who will win today?\n${teamA} vs ${teamB}`,
-          options:  [teamA, teamB],
-          durationHours: parseInt(duration)
-        })
+        body: JSON.stringify(pollBody)
       });
       const pData = await pRes.json();
       if (!pData.success) return setCpMsg(msgEl, 'Match set, but poll failed: ' + pData.message, 'error');
 
-      setCpMsg(msgEl, `✅ Match set & poll created for ${parseInt(duration)}h!`, 'success');
+      const label = durationFloat < 1 ? `${Math.round(durationFloat * 3600)}s (test)` : `${durationFloat}h`;
+      setCpMsg(msgEl, `✅ Match set & poll created for ${label}!`, 'success');
     } catch {
       setCpMsg(msgEl, 'Server error. Is the backend running?', 'error');
     }
