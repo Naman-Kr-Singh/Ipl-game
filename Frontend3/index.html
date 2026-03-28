@@ -715,6 +715,78 @@
     .cards-grid { grid-template-columns: 1fr; }
     .players-grid { grid-template-columns: 1fr; }
   }
+
+  /* ===== QR PAYMENT ===== */
+  .qr-thumb {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,0.06);
+    border: 1px dashed rgba(247,168,0,0.4);
+    border-radius: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .qr-thumb:hover { background: rgba(247,168,0,0.07); border-color: rgba(247,168,0,0.7); }
+  .qr-thumb img { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+  .qr-thumb span { font-size: 12px; color: rgba(247,168,0,0.8); font-weight: 600; letter-spacing: 0.5px; }
+
+  .qr-overlay {
+    display: none; position: fixed; inset: 0; z-index: 99999;
+    background: rgba(0,0,20,0.75);
+    backdrop-filter: blur(10px);
+    align-items: center; justify-content: center;
+  }
+  .qr-overlay.open { display: flex; }
+  .qr-modal {
+    background: linear-gradient(160deg, #001a5c 0%, #002a7a 100%);
+    border: 1px solid rgba(247,168,0,0.3);
+    border-radius: 22px; padding: 28px 28px 24px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 18px; position: relative; max-width: 320px; width: 90%;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.7);
+    animation: qr-in 0.28s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  @keyframes qr-in { from { opacity:0; transform:scale(0.85); } to { opacity:1; transform:scale(1); } }
+  .qr-close {
+    position: absolute; top: 14px; right: 14px;
+    background: rgba(255,255,255,0.08); border: none;
+    border-radius: 8px; width: 32px; height: 32px;
+    color: #fff; font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .qr-close:hover { background: rgba(255,80,80,0.3); }
+  .qr-full { width: 220px; height: 220px; object-fit: contain; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); }
+  .qr-paid-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .qr-paid-label { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.7); width: 100%; text-align: center; }
+  .qr-paid-btn {
+    padding: 8px 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.07); color: #fff; font-size: 13px;
+    font-weight: 600; cursor: pointer; transition: background 0.2s, transform 0.15s;
+  }
+  .qr-paid-btn:hover { transform: translateY(-1px); }
+  .qr-paid-yes:hover { background: rgba(74,222,128,0.2); border-color: rgba(74,222,128,0.4); }
+  .qr-paid-no:hover  { background: rgba(255,107,107,0.2); border-color: rgba(255,107,107,0.4); }
+  .qr-paid-msg { font-size: 12px; color: rgba(255,255,255,0.45); text-align: center; min-height: 16px; }
+
+  /* ===== PLAYER CARD TEAM TINTS ===== */
+  .player-card { position: relative; overflow: hidden; }
+  .player-streak { display: flex; align-items: center; gap: 5px; margin-top: 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; }
+  .streak-fire { font-size: 13px; }
+  .streak-label { color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 1px; }
+  .streak-val { color: var(--ipl-gold); font-family: 'Bebas Neue', cursive; font-size: 15px; }
+  .streak-cold { color: rgba(100,180,255,0.8); }
+
+  /* ===== ACHIEVEMENTS PAGE (standalone) ===== */
+  .ach-page-wrap { width: 100%; max-width: 560px; text-align: left; }
+  .ach-page-note {
+    margin-top: 24px; padding: 14px 18px;
+    background: rgba(240,90,40,0.07);
+    border: 1px solid rgba(240,90,40,0.2);
+    border-radius: 12px; font-size: 12px;
+    color: rgba(255,255,255,0.42); line-height: 1.7;
+    text-align: center; font-style: italic;
+  }
 </style>
 </head>
 <body>
@@ -753,6 +825,29 @@
         <label>Password</label>
         <input type="password" id="lsSignupPass" placeholder="Choose a password" />
       </div>
+      <!-- QR Payment Box -->
+      <div class="auth-field">
+        <label>Entry Payment</label>
+        <div class="qr-thumb" id="qrThumb" onclick="openQR()">
+          <img src="./qr.png" alt="QR Code" />
+          <span>Click to open QR &amp; pay</span>
+        </div>
+      </div>
+
+      <!-- QR Overlay -->
+      <div class="qr-overlay" id="qrOverlay" onclick="closeQR()">
+        <div class="qr-modal" onclick="event.stopPropagation()">
+          <button class="qr-close" onclick="closeQR()">✕</button>
+          <img src="./qr.png" alt="QR Code" class="qr-full" />
+          <div class="qr-paid-row">
+            <span class="qr-paid-label">Have you paid?</span>
+            <button class="qr-paid-btn qr-paid-yes" onclick="markPaid(true)">✅ Yes</button>
+            <button class="qr-paid-btn qr-paid-no" onclick="markPaid(false)">❌ No</button>
+          </div>
+          <div class="qr-paid-msg" id="qrPaidMsg"></div>
+        </div>
+      </div>
+
       <div class="auth-field">
         <label>Favourite IPL Team</label>
         <select id="lsSignupTeam">
@@ -886,7 +981,130 @@
   <div class="page-back" onclick="closePage()">←</div>
   <div class="page-icon">🎖️</div>
   <div class="page-title">Achievements</div>
-  <p class="page-msg">Badges, streaks, and milestones will appear here.</p>
+
+  <div class="ach-page-wrap">
+
+    <div class="rules-section-heading">Streak Bonuses</div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">🔥</div>
+      <div class="ach-body">
+        <div class="ach-title">Personal Winning Streak — 5 / 7 / 10</div>
+        <div class="ach-desc">Earn bonus points when you correctly predict 5, 7, or 10 matches in a row. Repeatable — can be earned multiple times by anyone.</div>
+      </div>
+      <div class="ach-reward">+1/2/3<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">💀</div>
+      <div class="ach-body">
+        <div class="ach-title">Personal Losing Streak — 5 in a Row</div>
+        <div class="ach-desc">Getting a pity point for suffering through 5 straight wrong predictions. Repeatable — can be earned multiple times by anyone.</div>
+      </div>
+      <div class="ach-reward">+1<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">⭐</div>
+      <div class="ach-body">
+        <div class="ach-title">Favourite Team Winning Streak — 5 / 7 / 10</div>
+        <div class="ach-desc">Bonus points when your favourite team wins 5, 7, or 10 consecutive matches. One-time only per player per tier.</div>
+      </div>
+      <div class="ach-reward">+1/2/3<span>pts</span></div>
+    </div>
+
+    <div class="rules-section-heading">Cap Awards</div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">🟣</div>
+      <div class="ach-body">
+        <div class="ach-title">Purple Cap — Favourite Team</div>
+        <div class="ach-desc">The leading wicket-taker (Purple Cap holder) belongs to your favourite team before the semi-finals. One-time only; shared across players with the same favourite team.</div>
+      </div>
+      <div class="ach-reward">+1<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">🟠</div>
+      <div class="ach-body">
+        <div class="ach-title">Orange Cap — Favourite Team</div>
+        <div class="ach-desc">The leading run-scorer (Orange Cap holder) belongs to your favourite team before the semi-finals. One-time only; shared across players with the same favourite team.</div>
+      </div>
+      <div class="ach-reward">+1<span>pts</span></div>
+    </div>
+
+    <div class="rules-section-heading">Tournament Milestones</div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">🏟️</div>
+      <div class="ach-body">
+        <div class="ach-title">Favourite Team Qualifies for Semi-Finals</div>
+        <div class="ach-desc">Your favourite team makes it to the knockout stage.</div>
+      </div>
+      <div class="ach-reward">+1<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">🥈</div>
+      <div class="ach-body">
+        <div class="ach-title">Favourite Team Qualifies for the Final</div>
+        <div class="ach-desc">Your favourite team advances to the IPL Final.</div>
+      </div>
+      <div class="ach-reward">+2<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">🏆</div>
+      <div class="ach-body">
+        <div class="ach-title">Favourite Team Wins the Final</div>
+        <div class="ach-desc">Your favourite team lifts the IPL trophy. The ultimate achievement.</div>
+      </div>
+      <div class="ach-reward">+3<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">💔</div>
+      <div class="ach-body">
+        <div class="ach-title">First Team Eliminated</div>
+        <div class="ach-desc">Your favourite team is the first side knocked out of the tournament. Condolences — here's a consolation prize.</div>
+      </div>
+      <div class="ach-reward">+2<span>pts</span></div>
+    </div>
+
+    <div class="rules-section-heading">Season Awards</div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">📈</div>
+      <div class="ach-body">
+        <div class="ach-title">Longest Personal Streak of the Season</div>
+        <div class="ach-desc">The player(s) with the longest prediction streak over the entire season. Shared equally if multiple players tie.</div>
+      </div>
+      <div class="ach-reward">TBD<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">🌟</div>
+      <div class="ach-body">
+        <div class="ach-title">MVP from Favourite Team</div>
+        <div class="ach-desc">The officially declared MVP of the tournament belongs to your favourite team.</div>
+      </div>
+      <div class="ach-reward">+1<span>pts</span></div>
+    </div>
+
+    <div class="achievement-item">
+      <div class="ach-icon">⚡</div>
+      <div class="ach-body">
+        <div class="ach-title">First &amp; Last to 15 Points</div>
+        <div class="ach-desc">The first player to reach 15 points earns a bonus. So does the last player to reach 15 points. Two opportunities, two different players.</div>
+      </div>
+      <div class="ach-reward">+1<span>pts</span></div>
+    </div>
+
+    <div class="ach-page-note">
+      ⚠️ Rules are subject to patches if loopholes are discovered. Play fair, vote on time, and may your favourites never disappoint — but if they do, at least you get points for it.
+    </div>
+
+  </div>
 </div>
 
 <!-- ===== RULES PAGE ===== -->
@@ -931,117 +1149,6 @@
     <div class="rule-item">
       <div class="rule-num">8</div>
       <div class="rule-text">Rules may be updated if loopholes are discovered. <strong>Stay sharp.</strong></div>
-    </div>
-
-    <!-- ACHIEVEMENTS -->
-    <div class="rules-section-heading">Achievements</div>
-
-    <div class="achievement-item">
-      <div class="ach-icon">🔥</div>
-      <div class="ach-body">
-        <div class="ach-title">Personal Winning Streak — 5 / 7 / 10</div>
-        <div class="ach-desc">Earn bonus points when you correctly predict 5, 7, or 10 matches in a row. Repeatable — can be earned multiple times by anyone.</div>
-      </div>
-      <div class="ach-reward">+1/2/3<span>pts</span></div>
-    </div>
-
-    <div class="achievement-item">
-      <div class="ach-icon">💀</div>
-      <div class="ach-body">
-        <div class="ach-title">Personal Losing Streak — 5 in a Row</div>
-        <div class="ach-desc">Getting a pity point for suffering through 5 straight wrong predictions. Repeatable — can be earned multiple times by anyone.</div>
-      </div>
-      <div class="ach-reward">+1<span>pts</span></div>
-    </div>
-
-    <div class="achievement-item">
-      <div class="ach-icon">⭐</div>
-      <div class="ach-body">
-        <div class="ach-title">Favourite Team Winning Streak — 5 / 7 / 10</div>
-        <div class="ach-desc">Bonus points when your favourite team wins 5, 7, or 10 consecutive matches. One-time only per player per tier.</div>
-      </div>
-      <div class="ach-reward">+1/2/3<span>pts</span></div>
-    </div>
-
-    <div class="achievement-item">
-      <div class="ach-icon">🟣</div>
-      <div class="ach-body">
-        <div class="ach-title">Purple Cap — Favourite Team</div>
-        <div class="ach-desc">The leading wicket-taker (Purple Cap holder) belongs to your favourite team before the semi-finals. One-time only; shared across players with the same favourite team.</div>
-      </div>
-      <div class="ach-reward">+1<span>pts</span></div>
-    </div>
-
-    <div class="achievement-item">
-      <div class="ach-icon">🟠</div>
-      <div class="ach-body">
-        <div class="ach-title">Orange Cap — Favourite Team</div>
-        <div class="ach-desc">The leading run-scorer (Orange Cap holder) belongs to your favourite team before the semi-finals. One-time only; shared across players with the same favourite team.</div>
-      </div>
-      <div class="ach-reward">+1<span>pts</span></div>
-    </div>
-
-    <div class="achievement-item">
-      <div class="ach-icon">🏟️</div>
-      <div class="ach-body">
-        <div class="ach-title">Favourite Team Qualifies for Semi-Finals</div>
-        <div class="ach-desc">Your favourite team makes it to the knockout stage.</div>
-      </div>
-      <div class="ach-reward">+1<span>pts</span></div>
-    </div>
-
-    <div class="achievement-item">
-      <div class="ach-icon">🥈</div>
-      <div class="ach-body">
-        <div class="ach-title">Favourite Team Qualifies for the Final</div>
-        <div class="ach-desc">Your favourite team advances to the IPL Final.</div>
-      </div>
-      <div class="ach-reward">+2<span>pts</span></div>
-    </div>
-
-    <div class="achievement-item">
-      <div class="ach-icon">🏆</div>
-      <div class="ach-body">
-        <div class="ach-title">Favourite Team Wins the Final</div>
-        <div class="ach-desc">Your favourite team lifts the IPL trophy. The ultimate achievement.</div>
-      </div>
-      <div class="ach-reward">+3<span>pts</span></div>
-    </div>
-
-    <div class="achievement-item">
-      <div class="ach-icon">💔</div>
-      <div class="ach-body">
-        <div class="ach-title">First Team Eliminated</div>
-        <div class="ach-desc">Your favourite team is the first side knocked out of the tournament. Condolences — here's a consolation prize.</div>
-      </div>
-      <div class="ach-reward">+2<span>pts</span></div>
-    </div>
-
-    <div class="achievement-item">
-      <div class="ach-icon">📈</div>
-      <div class="ach-body">
-        <div class="ach-title">Longest Personal Streak of the Season</div>
-        <div class="ach-desc">The player(s) with the longest prediction streak over the entire season. Shared equally if multiple players tie.</div>
-      </div>
-      <div class="ach-reward">TBD<span>pts</span></div>
-    </div>
-
-    <div class="achievement-item">
-      <div class="ach-icon">🌟</div>
-      <div class="ach-body">
-        <div class="ach-title">MVP from Favourite Team</div>
-        <div class="ach-desc">The officially declared MVP of the tournament belongs to your favourite team.</div>
-      </div>
-      <div class="ach-reward">+1<span>pts</span></div>
-    </div>
-
-    <div class="achievement-item">
-      <div class="ach-icon">⚡</div>
-      <div class="ach-body">
-        <div class="ach-title">First & Last to 15 Points</div>
-        <div class="ach-desc">The first player to reach 15 points earns a bonus. So does the last player to reach 15 points. Two opportunities, two different players.</div>
-      </div>
-      <div class="ach-reward">+1<span>pts</span></div>
     </div>
 
     <!-- FOOTER NOTE -->
@@ -1338,6 +1445,31 @@
     } catch { el.innerHTML = '<p class="no-match">Could not load leaderboard.</p>'; }
   }
 
+  const TEAM_TINTS = {
+    'Chennai Super Kings':         'rgba(255,210,0,0.13)',
+    'Delhi Capitals':              'rgba(0,150,255,0.13)',
+    'Gujarat Titans':              'rgba(30,100,200,0.13)',
+    'Kolkata Knight Riders':       'rgba(120,50,180,0.13)',
+    'Lucknow Super Giants':        'rgba(0,180,200,0.13)',
+    'Mumbai Indians':              'rgba(0,80,200,0.13)',
+    'Punjab Kings':                'rgba(220,30,50,0.13)',
+    'Rajasthan Royals':            'rgba(220,100,160,0.13)',
+    'Royal Challengers Bengaluru': 'rgba(200,20,20,0.13)',
+    'Sunrisers Hyderabad':         'rgba(255,100,0,0.13)',
+  };
+  const TEAM_BORDERS = {
+    'Chennai Super Kings':         'rgba(255,210,0,0.35)',
+    'Delhi Capitals':              'rgba(0,150,255,0.35)',
+    'Gujarat Titans':              'rgba(30,100,200,0.35)',
+    'Kolkata Knight Riders':       'rgba(120,50,180,0.35)',
+    'Lucknow Super Giants':        'rgba(0,180,200,0.35)',
+    'Mumbai Indians':              'rgba(0,80,200,0.35)',
+    'Punjab Kings':                'rgba(220,30,50,0.35)',
+    'Rajasthan Royals':            'rgba(220,100,160,0.35)',
+    'Royal Challengers Bengaluru': 'rgba(200,20,20,0.35)',
+    'Sunrisers Hyderabad':         'rgba(255,100,0,0.35)',
+  };
+
   async function loadPlayers() {
     const el = document.getElementById('players-content');
     el.innerHTML = '<div class="spinner"></div>';
@@ -1345,13 +1477,27 @@
       const res  = await fetch(`${API}/leaderboard`);
       const data = await res.json();
       if (!data.success || !data.data.length) { el.innerHTML = '<p class="no-match">No players registered yet.</p>'; return; }
-      const cards = data.data.map(u => `
-        <div class="player-card">
+      const cards = data.data.map(u => {
+        const tint   = TEAM_TINTS[u.favoriteTeam]   || 'rgba(255,255,255,0.04)';
+        const border = TEAM_BORDERS[u.favoriteTeam]  || 'rgba(255,255,255,0.08)';
+        const streak = u.streak ?? 0;
+        let streakHtml = '';
+        if (streak > 0) {
+          streakHtml = `<div class="player-streak"><span class="streak-fire">🔥</span><span class="streak-val">${streak}</span><span class="streak-label">&nbsp;streak</span></div>`;
+        } else if (streak < 0) {
+          streakHtml = `<div class="player-streak"><span class="streak-fire">❄️</span><span class="streak-val streak-cold">${Math.abs(streak)}</span><span class="streak-label">&nbsp;losing</span></div>`;
+        } else {
+          streakHtml = `<div class="player-streak"><span class="streak-label">No streak</span></div>`;
+        }
+        return `
+        <div class="player-card" style="background:${tint};border-color:${border};">
           <div class="player-name">👤 ${escHtml(u.name)}</div>
           <div class="player-team">${getTeamHeart(u.favoriteTeam)} ${escHtml(u.favoriteTeam || 'No team')}</div>
+          ${streakHtml}
           <div class="player-pts">${u.points ?? 0}</div>
           <div class="player-pts-label">points</div>
-        </div>`).join('');
+        </div>`;
+      }).join('');
       el.innerHTML = `<div class="players-grid">${cards}</div>`;
     } catch { el.innerHTML = '<p class="no-match">Could not load players.</p>'; }
   }
@@ -1431,11 +1577,57 @@
           <button class="cp-btn" onclick="doUpdatePoints()">Update Points</button>
           <div class="cp-msg" id="pointsMsg"></div>
         </div>
+
+        <div class="cp-section">
+          <div class="cp-section-title">🏆 Declare Match Result</div>
+          <p style="font-size:13px;color:rgba(255,255,255,0.45);margin-bottom:16px;line-height:1.6;">Declare the winner of the current match. All players who predicted correctly will automatically receive <strong style="color:#fff">+1 point</strong>.</p>
+          <div id="cpResultTeams" style="display:flex;gap:12px;margin-bottom:6px;"></div>
+          <div class="cp-msg" id="resultMsg"></div>
+        </div>
       </div>`;
 
     const today = new Date().toISOString().slice(0, 10);
     document.getElementById('cpMatchDate').value = today;
     loadPlayersForCP();
+    loadMatchForResult();
+  }
+
+  async function loadMatchForResult() {
+    const el = document.getElementById('cpResultTeams');
+    if (!el) return;
+    try {
+      const res  = await fetch(`${API}/today-match`);
+      const data = await res.json();
+      if (!data.success) {
+        el.innerHTML = '<p style="font-size:13px;color:rgba(255,255,255,0.3);">No active match set.</p>';
+        return;
+      }
+      const { teamA, teamB } = data.data;
+      el.innerHTML = `
+        <button class="cp-btn" style="flex:1;font-size:14px;" onclick="doDeclareResult('${escHtml(teamA)}')">${escHtml(teamA)} Wins 🏆</button>
+        <button class="cp-btn" style="flex:1;font-size:14px;background:linear-gradient(135deg,#6464ff,#3030cc);" onclick="doDeclareResult('${escHtml(teamB)}')">${escHtml(teamB)} Wins 🏆</button>`;
+    } catch {
+      el.innerHTML = '<p style="font-size:13px;color:rgba(255,255,255,0.3);">Could not load match.</p>';
+    }
+  }
+
+  async function doDeclareResult(winner) {
+    const msgEl = document.getElementById('resultMsg');
+    if (!confirm(`Declare ${winner} as the winner? This will give +1 to all correct predictors.`)) return;
+    setCpMsg(msgEl, 'Declaring result...', '');
+    try {
+      const res  = await fetch(`${API}/declare-result`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+        body: JSON.stringify({ winner })
+      });
+      const data = await res.json();
+      if (!data.success) return setCpMsg(msgEl, data.message, 'error');
+      setCpMsg(msgEl, `✅ ${data.message}`, 'success');
+      loadPlayersForCP();
+    } catch {
+      setCpMsg(msgEl, 'Server error.', 'error');
+    }
   }
 
   async function loadPlayersForCP() {
@@ -1516,6 +1708,25 @@
   function setCpMsg(el, msg, type) {
     el.textContent = msg;
     el.className   = 'cp-msg ' + (type || '');
+  }
+
+  // ===== QR FUNCTIONS =====
+  function openQR() {
+    document.getElementById('qrOverlay').classList.add('open');
+    document.getElementById('qrPaidMsg').textContent = '';
+  }
+  function closeQR() {
+    document.getElementById('qrOverlay').classList.remove('open');
+  }
+  function markPaid(yes) {
+    const msg = document.getElementById('qrPaidMsg');
+    if (yes) {
+      msg.textContent = '✅ Great! Account will be activated after confirmation.';
+      msg.style.color = '#4ade80';
+    } else {
+      msg.textContent = '⚠️ Please complete payment to participate. Rule 6: Payment first!';
+      msg.style.color = '#ff6b6b';
+    }
   }
 
   function escHtml(s) {
