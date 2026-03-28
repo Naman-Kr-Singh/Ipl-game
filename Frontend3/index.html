@@ -68,6 +68,35 @@
     text-transform: uppercase;
     margin-bottom: 32px;
   }
+  .watermark {
+  position: fixed;
+  bottom: 12px;
+  right: 16px;
+  z-index: 9999;
+
+  font-family: 'Barlow', sans-serif;
+  font-size: 11px;
+  line-height: 1.4;
+  text-align: right;
+
+  color: rgba(255, 255, 255, 0.35);
+
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+
+  padding: 8px 12px;
+  border-radius: 10px;
+
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  pointer-events: none; /* 🔥 doesn't block clicks */
+}
+
+.watermark span {
+  font-size: 10px;
+  color: rgba(247,168,0,0.6);
+  letter-spacing: 0.5px;
+}
 
   /* ===== SHELL (main app) ===== */
   .shell {
@@ -1178,6 +1207,10 @@
   <div class="page-title">Control Panel</div>
   <div id="control-content" style="width:100%;display:flex;flex-direction:column;align-items:center;"></div>
 </div>
+<div class="watermark">
+  Powered by Passion<br>
+  <span>By Naman & Sarthak</span>
+</div>
 
 </div><!-- end appWrapper -->
 
@@ -1365,6 +1398,7 @@
       el.innerHTML = '<p class="no-match">Could not load match. Check if your backend is running.</p>';
     }
   }
+  
 
   async function loadPoll() {
     const el = document.getElementById('poll-content');
