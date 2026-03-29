@@ -394,7 +394,7 @@ app.post('/create-poll', authMiddleware, async (req, res) => {
 // ================= GET CURRENT POLL =================
 app.get('/poll', async (req, res) => {
   try {
-    const poll = await Poll.findOne();
+    const poll = await Poll.findOne().populate('voters.userId', 'name');
 
     if (!poll) {
       return res.json({
@@ -468,7 +468,7 @@ app.post('/vote', authMiddleware, async (req, res) => {
 
     // ✅ vote
     poll.options[optionIndex].votes += 1;
-    poll.voters.push({ userId });
+    poll.voters.push({ userId, optionIndex });
 
     await poll.save();
 
