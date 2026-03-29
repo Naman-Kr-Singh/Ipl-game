@@ -486,6 +486,12 @@
   .poll-option-pct { font-size: 12px; color: var(--ipl-gold); font-weight: 700; }
   .poll-voted-msg { font-size: 12px; color: rgba(255,255,255,0.38); text-align: center; margin-top: 12px; }
 
+  .poll-voters {
+  margin-top: 6px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.4;
+  }
   /* ===== LEADERBOARD PAGE ===== */
   .leaderboard-table { width: 100%; max-width: 560px; }
   .lb-row {
@@ -1418,18 +1424,24 @@
     const minsLeft = Math.max(0, Math.round((expiry - Date.now()) / 60000));
     const timeStr  = minsLeft > 60 ? `${Math.round(minsLeft/60)}h left` : `${minsLeft}m left`;
 
-    const optionsHtml = poll.options.map((opt, i) => {
-      const pct     = totalVotes > 0 ? Math.round((opt.votes / totalVotes) * 100) : 0;
-      const showPct = !!myVote;
-      return `
-        <div class="poll-option" onclick="doVote(${i})" id="popt-${i}">
-          <div class="poll-option-bar" style="width:${showPct ? pct : 0}%"></div>
-          <div class="poll-option-label">
-            <span>${escHtml(opt.text)}</span>
-            ${showPct ? `<span class="poll-option-pct">${pct}%</span>` : ''}
-          </div>
-        </div>`;
-    }).join('');
+const optionsHtml = poll.options.map((opt, i) => {
+  const pct = totalVotes > 0 ? Math.round((opt.votes / totalVotes) * 100) : 0;
+  const showPct = !!myVote;
+
+  const votersList = opt.voters?.length
+    ? `<div class="poll-voters">👤 ${opt.voters.join(', ')}</div>`
+    : '';
+
+  return `
+    <div class="poll-option" onclick="doVote(${i})" id="popt-${i}">
+      <div class="poll-option-bar" style="width:${showPct ? pct : 0}%"></div>
+      <div class="poll-option-label">
+        <span>${escHtml(opt.text)}</span>
+        ${showPct ? `<span class="poll-option-pct">${pct}%</span>` : ''}
+      </div>
+      ${showPct ? votersList : ''}
+    </div>`;
+}).join('');
 
     el.innerHTML = `
       <div class="poll-card">
