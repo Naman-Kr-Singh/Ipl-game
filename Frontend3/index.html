@@ -1491,14 +1491,6 @@ async function doVote(optionIndex) {
   }
 }
 
-    // 🔹 3. Update UI
-    renderPoll(data.data, document.getElementById('poll-content'));
-
-  } catch (err) {
-    console.error(err);
-  }
-}
-
   async function loadLeaderboard() {
     const el = document.getElementById('leaderboard-content');
     el.innerHTML = '<div class="spinner"></div>';
