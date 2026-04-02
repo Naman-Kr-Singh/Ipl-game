@@ -1439,7 +1439,7 @@ const optionsHtml = poll.options.map((opt, i) => {
         <span>${escHtml(opt.text)}</span>
         ${showPct ? `<span class="poll-option-pct">${pct}%</span>` : ''}
       </div>
-      ${showPct ? votersList : ''}
+      ${votersList}
     </div>`;
 }).join('');
 
