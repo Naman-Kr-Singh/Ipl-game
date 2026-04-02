@@ -1419,7 +1419,7 @@
 
   function renderPoll(poll, el) {
     const totalVotes = poll.options.reduce((s, o) => s + (o.votes || 0), 0);
-    const myVote = poll.voters?.find(v => v.userId === currentUser._id);
+    const myVote = poll.voters?.find(v => String(v.userId) === String(currentUser._id));
     const expiry = new Date(poll.expiresAt);
     const minsLeft = Math.max(0, Math.round((expiry - Date.now()) / 60000));
     const timeStr  = minsLeft > 60 ? `${Math.round(minsLeft/60)}h left` : `${minsLeft}m left`;
@@ -1456,15 +1456,12 @@ async function doVote(optionIndex) {
   if (!authToken) return;
 
   try {
-    // 🔹 First get poll to know which team was selected
-    const pollRes = await fetch(`${API}/poll`);
+    const pollRes  = await fetch(`${API}/poll`);
     const pollData = await pollRes.json();
-
     if (!pollData.success) return;
 
     const selectedOption = pollData.data.options[optionIndex].text;
 
-    // 🔹 1. Send vote
     const res = await fetch(`${API}/vote`, {
       method: 'POST',
       headers: {
@@ -1477,7 +1474,6 @@ async function doVote(optionIndex) {
     const data = await res.json();
     if (!data.success) return;
 
-    // 🔹 2. ALSO save prediction (🔥 IMPORTANT)
     await fetch(`${API}/predict`, {
       method: 'POST',
       headers: {
@@ -1486,6 +1482,14 @@ async function doVote(optionIndex) {
       },
       body: JSON.stringify({ team: selectedOption })
     });
+
+    // ✅ Re-fetch from GET /poll to get populated voter names
+    await loadPoll();
+
+  } catch (err) {
+    console.error(err);
+  }
+}
 
     // 🔹 3. Update UI
     renderPoll(data.data, document.getElementById('poll-content'));
