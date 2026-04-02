@@ -1428,7 +1428,7 @@ const optionsHtml = poll.options.map((opt, i) => {
   const pct = totalVotes > 0 ? Math.round((opt.votes / totalVotes) * 100) : 0;
   const showPct = !!myVote;
 
-  const votersList = opt.voters?.length
+  const votersList = (myVote && opt.voters?.length)
     ? `<div class="poll-voters">👤 ${opt.voters.join(', ')}</div>`
     : '';
 
@@ -1810,3 +1810,4 @@ async function doVote(optionIndex) {
 </script>
 </body>
 </html>
+
