@@ -1419,7 +1419,7 @@
 
   function renderPoll(poll, el) {
     const totalVotes = poll.options.reduce((s, o) => s + (o.votes || 0), 0);
-    const myVote = poll.voters?.find(v => String(v.userId) === String(currentUser._id));
+    const myVote = poll.voters?.find(v => { const id = v.userId?._id ?? v.userId; return String(id) === String(currentUser._id); });
     const expiry = new Date(poll.expiresAt);
     const minsLeft = Math.max(0, Math.round((expiry - Date.now()) / 60000));
     const timeStr  = minsLeft > 60 ? `${Math.round(minsLeft/60)}h left` : `${minsLeft}m left`;
@@ -1810,4 +1810,3 @@ async function doVote(optionIndex) {
 </script>
 </body>
 </html>
-
