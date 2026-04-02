@@ -410,10 +410,22 @@ app.get('/poll', async (req, res) => {
         message: "Poll expired"
       });
     }
+    const pollData = poll.toObject();
+
+pollData.options = pollData.options.map((opt, index) => {
+  const voters = pollData.voters
+    .filter(v => v.optionIndex === index)
+    .map(v => v.userId?.name || "Unknown");
+
+  return {
+    ...opt,
+    voters
+  };
+});
 
     res.json({
       success: true,
-      data: poll
+      data: pollData
     });
 
   } catch (err) {
