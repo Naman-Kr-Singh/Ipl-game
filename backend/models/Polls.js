@@ -10,10 +10,14 @@ const pollSchema = new mongoose.Schema({
   ],
   expiresAt: Date,
   voters: [
-    {
-      userId: String
-    }
-  ]
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    optionIndex: Number
+  }
+]
 });
 
 export default mongoose.model("Poll", pollSchema);
