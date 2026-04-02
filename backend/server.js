@@ -532,12 +532,10 @@ app.post('/predict', authMiddleware, async (req, res) => {
       });
     }
 
-    user.prediction = {
-      team,
-      matchId: match._id
-    };
-
-    await user.save();
+    await User.updateOne(
+      { _id: userId },
+      { $set: { prediction: { team, matchId: match._id } } }
+    );
 
     res.json({
       success: true,
@@ -627,13 +625,14 @@ app.post('/declare-result', authMiddleware, async (req, res) => {
         user.streak = (user.streak < 0) ? user.streak - 1 : -1;
       }
 
-      // Clear prediction for next match — set BEFORE the single save below
-      user.prediction = null;
-
-      // ✅ KEY FIX: ONE save only. The original code had two saves —
-      // the second one (prediction=null) was overwriting the points update,
-      // which is why winners always got 0 points.
-      await user.save();
+      // ✅ Use updateOne to reliably update points, streak and clear prediction
+      await User.updateOne(
+        { _id: user._id },
+        {
+          $set: { points: user.points, streak: user.streak },
+          $unset: { prediction: "" }
+        }
+      );
     }
 
     res.json({
