@@ -1406,9 +1406,9 @@
   }
   
 
-  async function loadPoll() {
+  async function loadPoll(silent = false) {
     const el = document.getElementById('poll-content');
-    el.innerHTML = '';
+    if (!silent) el.innerHTML = '';
     try {
       const res  = await fetch(`${API}/poll`);
       const data = await res.json();
@@ -1484,7 +1484,7 @@ async function doVote(optionIndex) {
     });
 
     // ✅ Re-fetch from GET /poll to get populated voter names
-    await loadPoll();
+    await loadPoll(true);
 
   } catch (err) {
     console.error(err);
