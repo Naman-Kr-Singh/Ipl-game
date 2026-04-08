@@ -16,16 +16,22 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-
-// ================= MIDDLEWARE =================
-app.use(cors({
-  origin: '*',
+// ================= CORS CONFIG =================
+// Use the exact frontend origin here.
+// If you later use a different domain, add it here too.
+const corsOptions = {
+  origin: 'https://iplgame.losingmoney.workers.dev',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  preflightContinue: false,
+  credentials: true,
   optionsSuccessStatus: 204
-}));
+};
 
+// Handle preflight requests with the same CORS settings
+app.options('*', cors(corsOptions));
+
+// ================= MIDDLEWARE =================
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 
@@ -42,13 +48,10 @@ const authMiddleware = (req, res, next) => {
     }
 
     const token = authHeader.split(" ")[1];
-
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     req.user = decoded; // { userId, isAdmin }
-
     next();
-
   } catch (err) {
     return res.status(401).json({
       success: false,
@@ -59,20 +62,18 @@ const authMiddleware = (req, res, next) => {
 
 // ================= ROUTES =================
 
-// 🔹 Test route
+// Test route
 app.get('/', (req, res) => {
   res.send('Backend is running 🚀');
 });
 
-
 // ================= AUTH =================
 
-// 🔹 Signup (default user)
+// Signup (default user)
 app.post('/signup', async (req, res) => {
   try {
     const { name, password, favoriteTeam } = req.body;
 
-    // ✅ Validation
     if (!name || !password || !favoriteTeam) {
       return res.status(400).json({
         success: false,
@@ -89,15 +90,14 @@ app.post('/signup', async (req, res) => {
       });
     }
 
-   
-const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-const user = new User({
-  name,
-  password: hashedPassword,
-  favoriteTeam,
-  isAdmin: false
-});
+    const user = new User({
+      name,
+      password: hashedPassword,
+      favoriteTeam,
+      isAdmin: false
+    });
 
     await user.save();
 
@@ -109,7 +109,6 @@ const user = new User({
         name: user.name
       }
     });
-
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -118,13 +117,11 @@ const user = new User({
   }
 });
 
-
-// 🔹 Login (normal + admin both)
+// Login (normal + admin both)
 app.post('/login', async (req, res) => {
   try {
     const { name, password } = req.body;
 
-    // ✅ Validation
     if (!name || !password) {
       return res.status(400).json({
         success: false,
@@ -143,31 +140,29 @@ app.post('/login', async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, user.password);
 
-if (!isMatch) {
-  return res.status(401).json({
-    success: false,
-    message: "Wrong password"
-  });
-}
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Wrong password"
+      });
+    }
 
-    // 🔐 Generate token
-const token = jwt.sign(
-  { userId: user._id, isAdmin: user.isAdmin },
-  process.env.JWT_SECRET,
-  { expiresIn: '1d' }
-);
+    const token = jwt.sign(
+      { userId: user._id, isAdmin: user.isAdmin },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
 
-res.json({
-  success: true,
-  message: "Login successful",
-  token,
-  data: {
-    _id: user._id,
-    name: user.name,
-    isAdmin: user.isAdmin
-  }
-});
-
+    res.json({
+      success: true,
+      message: "Login successful",
+      token,
+      data: {
+        _id: user._id,
+        name: user.name,
+        isAdmin: user.isAdmin
+      }
+    });
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -175,7 +170,6 @@ res.json({
     });
   }
 });
-
 
 // ================= LEADERBOARD =================
 app.get('/leaderboard', async (req, res) => {
@@ -188,7 +182,6 @@ app.get('/leaderboard', async (req, res) => {
       success: true,
       data: users
     });
-
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -197,15 +190,12 @@ app.get('/leaderboard', async (req, res) => {
   }
 });
 
-
 // ================= ADMIN: UPDATE POINTS =================
 app.post('/update-points', authMiddleware, async (req, res) => {
   try {
     const { targetUserId, points } = req.body;
-
     const userId = req.user.userId;
 
-    // ✅ Validation
     if (!userId || !targetUserId || points === undefined) {
       return res.status(400).json({
         success: false,
@@ -213,14 +203,21 @@ app.post('/update-points', authMiddleware, async (req, res) => {
       });
     }
 
-    if (points > 15 || points < -15) {
+    const parsedPoints = Number(points);
+
+    if (Number.isNaN(parsedPoints)) {
+      return res.status(400).json({
+        success: false,
+        message: "Points must be a number"
+      });
+    }
+
+    if (parsedPoints > 15 || parsedPoints < -15) {
       return res.status(400).json({
         success: false,
         message: "Invalid points range"
       });
     }
-
-    console.log("Updating points:", userId, targetUserId, points);
 
     const admin = await User.findById(userId);
 
@@ -240,7 +237,7 @@ app.post('/update-points', authMiddleware, async (req, res) => {
       });
     }
 
-    user.points += points;
+    user.points += parsedPoints;
     await user.save();
 
     res.json({
@@ -248,7 +245,6 @@ app.post('/update-points', authMiddleware, async (req, res) => {
       message: "Points updated",
       data: user
     });
-
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -256,13 +252,13 @@ app.post('/update-points', authMiddleware, async (req, res) => {
     });
   }
 });
+
 // ================= ADMIN: SET MATCH =================
 app.post('/set-match', authMiddleware, async (req, res) => {
   try {
     const { teamA, teamB, date } = req.body;
     const userId = req.user.userId;
 
-    // ✅ Validation
     if (!teamA || !teamB || !date) {
       return res.status(400).json({
         success: false,
@@ -277,7 +273,6 @@ app.post('/set-match', authMiddleware, async (req, res) => {
       });
     }
 
-    // 🔒 Admin check
     const admin = await User.findById(userId);
 
     if (!admin || !admin.isAdmin) {
@@ -287,7 +282,6 @@ app.post('/set-match', authMiddleware, async (req, res) => {
       });
     }
 
-    // 🧹 Only one active match
     await Match.deleteMany({});
 
     const match = new Match({
@@ -305,7 +299,6 @@ app.post('/set-match', authMiddleware, async (req, res) => {
       message: "Match set successfully",
       data: match
     });
-
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -313,7 +306,6 @@ app.post('/set-match', authMiddleware, async (req, res) => {
     });
   }
 });
-
 
 // ================= ADMIN: CREATE POLL =================
 app.post('/create-poll', authMiddleware, async (req, res) => {
@@ -330,7 +322,6 @@ app.post('/create-poll', authMiddleware, async (req, res) => {
       });
     }
 
-    // ✅ Validation
     if (!question || !options || (!durationHours && !durationSeconds)) {
       return res.status(400).json({
         success: false,
@@ -361,14 +352,12 @@ app.post('/create-poll', authMiddleware, async (req, res) => {
       });
     }
 
-    // durationSeconds for testing (e.g. 30s), durationHours for production
     const durationMs = durationSeconds
       ? Number(durationSeconds) * 1000
       : Number(durationHours) * 60 * 60 * 1000;
 
     const expiresAt = new Date(Date.now() + durationMs);
 
-    // 🧹 Only one active poll
     await Poll.deleteMany({});
 
     const poll = new Poll({
@@ -387,7 +376,6 @@ app.post('/create-poll', authMiddleware, async (req, res) => {
       message: "Poll created",
       data: poll
     });
-
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -395,7 +383,6 @@ app.post('/create-poll', authMiddleware, async (req, res) => {
     });
   }
 });
-
 
 // ================= GET CURRENT POLL =================
 app.get('/poll', async (req, res) => {
@@ -409,31 +396,30 @@ app.get('/poll', async (req, res) => {
       });
     }
 
-    // ⛔ expired
     if (new Date() > poll.expiresAt) {
       return res.json({
         success: false,
         message: "Poll expired"
       });
     }
+
     const pollData = poll.toObject();
 
-pollData.options = pollData.options.map((opt, index) => {
-  const voters = pollData.voters
-    .filter(v => v.optionIndex === index)
-    .map(v => v.userId?.name || "Unknown");
+    pollData.options = pollData.options.map((opt, index) => {
+      const voters = pollData.voters
+        .filter(v => v.optionIndex === index)
+        .map(v => v.userId?.name || "Unknown");
 
-  return {
-    ...opt,
-    voters
-  };
-});
+      return {
+        ...opt,
+        voters
+      };
+    });
 
     res.json({
       success: true,
       data: pollData
     });
-
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -441,7 +427,6 @@ pollData.options = pollData.options.map((opt, index) => {
     });
   }
 });
-
 
 // ================= VOTE =================
 app.post('/vote', authMiddleware, async (req, res) => {
@@ -458,7 +443,6 @@ app.post('/vote', authMiddleware, async (req, res) => {
       });
     }
 
-    // ⛔ expired
     if (new Date() > poll.expiresAt) {
       return res.status(400).json({
         success: false,
@@ -466,7 +450,6 @@ app.post('/vote', authMiddleware, async (req, res) => {
       });
     }
 
-    // ⛔ already voted — use String() on both sides to avoid ObjectId vs string mismatch
     const alreadyVoted = poll.voters.find(v => String(v.userId) === String(userId));
 
     if (alreadyVoted) {
@@ -476,7 +459,6 @@ app.post('/vote', authMiddleware, async (req, res) => {
       });
     }
 
-    // ⛔ invalid option
     if (optionIndex < 0 || optionIndex >= poll.options.length) {
       return res.status(400).json({
         success: false,
@@ -484,7 +466,6 @@ app.post('/vote', authMiddleware, async (req, res) => {
       });
     }
 
-    // ✅ vote
     poll.options[optionIndex].votes += 1;
     poll.voters.push({ userId, optionIndex });
 
@@ -495,7 +476,6 @@ app.post('/vote', authMiddleware, async (req, res) => {
       message: "Vote recorded",
       data: poll
     });
-
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -519,7 +499,6 @@ app.post('/predict', authMiddleware, async (req, res) => {
       });
     }
 
-    // rule: must choose fav team if playing
     const user = await User.findById(userId);
 
     if (
@@ -531,10 +510,11 @@ app.post('/predict', authMiddleware, async (req, res) => {
         message: "You must pick your favorite team"
       });
     }
+
     if (user.prediction && String(user.prediction.matchId) === String(match._id)) {
       return res.status(400).json({
-      success: false,
-      message: "Already predicted"
+        success: false,
+        message: "Already predicted"
       });
     }
 
@@ -547,7 +527,6 @@ app.post('/predict', authMiddleware, async (req, res) => {
       success: true,
       message: "Prediction saved"
     });
-
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -572,7 +551,6 @@ app.get('/today-match', async (req, res) => {
       success: true,
       data: match
     });
-
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -605,7 +583,6 @@ app.post('/declare-result', authMiddleware, async (req, res) => {
       });
     }
 
-    // validate winner
     if (winner !== match.teamA && winner !== match.teamB) {
       return res.status(400).json({
         success: false,
@@ -624,14 +601,11 @@ app.post('/declare-result', authMiddleware, async (req, res) => {
       if (predictedCorrectly) {
         user.points += 1;
         winnersCount++;
-        // Extend win streak (positive), or reset from losing streak
         user.streak = (user.streak > 0) ? user.streak + 1 : 1;
       } else if (hasPrediction) {
-        // Wrong prediction — extend lose streak (negative), or reset from win streak
         user.streak = (user.streak < 0) ? user.streak - 1 : -1;
       }
 
-      // ✅ Use updateOne to reliably update points, streak and clear prediction
       await User.updateOne(
         { _id: user._id },
         {
@@ -645,7 +619,6 @@ app.post('/declare-result', authMiddleware, async (req, res) => {
       success: true,
       message: `Result declared. ${winnersCount} users got +1 point`
     });
-
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -655,14 +628,11 @@ app.post('/declare-result', authMiddleware, async (req, res) => {
 });
 
 // ================= DB CONNECTION =================
-
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB Connected ✔'))
   .catch((err) => console.error('DB Error:', err.message));
 
-
 // ================= SERVER START =================
-
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
