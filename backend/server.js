@@ -18,7 +18,12 @@ const PORT = process.env.PORT || 5000;
 
 
 // ================= MIDDLEWARE =================
-app.use(cors());   // 🔥 allow everything (for now)
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+app.options('*', cors()); // handle preflight requests
 
 app.use(cookieParser());
 app.use(express.json());
@@ -610,47 +615,34 @@ app.post('/declare-result', authMiddleware, async (req, res) => {
     const users = await User.find();
 
     let winnersCount = 0;
-    const debugInfo = [];
 
     for (let user of users) {
-      const pred = user.prediction;
-      const hasPrediction = pred && pred.matchId && String(pred.matchId) === String(match._id);
-      const predictedCorrectly = hasPrediction && pred.team === winner;
-
-      debugInfo.push({
-        name: user.name,
-        prediction: pred ? { team: pred.team, matchId: String(pred.matchId) } : null,
-        matchId: String(match._id),
-        hasPrediction,
-        predictedCorrectly
-      });
-
-      let newPoints = user.points;
-      let newStreak = user.streak;
+      const hasPrediction = user.prediction && String(user.prediction.matchId) === String(match._id);
+      const predictedCorrectly = hasPrediction && user.prediction.team === winner;
 
       if (predictedCorrectly) {
-        newPoints += 1;
+        user.points += 1;
         winnersCount++;
-        newStreak = (newStreak > 0) ? newStreak + 1 : 1;
+        // Extend win streak (positive), or reset from losing streak
+        user.streak = (user.streak > 0) ? user.streak + 1 : 1;
       } else if (hasPrediction) {
-        newStreak = (newStreak < 0) ? newStreak - 1 : -1;
+        // Wrong prediction — extend lose streak (negative), or reset from win streak
+        user.streak = (user.streak < 0) ? user.streak - 1 : -1;
       }
 
+      // ✅ Use updateOne to reliably update points, streak and clear prediction
       await User.updateOne(
         { _id: user._id },
         {
-          $set: { points: newPoints, streak: newStreak },
-          $unset: { prediction: 1 }
+          $set: { points: user.points, streak: user.streak },
+          $unset: { prediction: "" }
         }
       );
     }
 
-    console.log("declare-result debug:", JSON.stringify(debugInfo, null, 2));
-
     res.json({
       success: true,
-      message: `Result declared. ${winnersCount} users got +1 point`,
-      debug: debugInfo
+      message: `Result declared. ${winnersCount} users got +1 point`
     });
 
   } catch (err) {
