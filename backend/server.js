@@ -28,7 +28,7 @@ const corsOptions = {
 };
 
 // Handle preflight requests with the same CORS settings
-app.options('*', cors(corsOptions));
+
 
 // ================= MIDDLEWARE =================
 app.use(cors(corsOptions));
